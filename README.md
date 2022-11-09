@@ -80,7 +80,7 @@ $n_i$ = Position of opponent in $n$ \
 $w_i$ = Won rounds against opponent \
 $t$ = Total won rounds
 
-$$ \sum_{i=1}^{o}{(((n_i+1)/n)^3) * w_i/t} $$
+$$ \sum_{i=1}^{o}{((n_i+1)/n)^3 * w_i/t} $$
 
 This is averaged so that number of rounds per opponent are accounted for
 proportionally.
