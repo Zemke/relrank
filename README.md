@@ -146,14 +146,14 @@ uses two configuration parameters.
 
 `relSteps` is used in a formula to determine the total number of relativization
 steps. \
-Consider `a` to be `relSteps` and `x` is the maximum total number of
+Consider $a$ to be `relSteps` and $x$ is the maximum total number of
 steps played of any user.
 
 $$ S = \max(\min(\left\lfloor -1+\log(x*.13)*a \right\rceil,21),1) $$
 
 `S` is solved for the number of relativization steps to take.
 
-Assuming `relSteps` is `36`, it would generate the following relativization
+Assuming `relSteps` is $36$, it would generate the following relativization
 steps per maximum rounds played of any user.
 
 ![Relativization steps per max rounds played of any user](images/relsteps.png)
@@ -167,10 +167,10 @@ Hence a greater `relSteps` factor causes the relativization to be more effect
 thus weighing in more in the balancing ob the absolute number versus the
 relativized result.
 
-There has got to be at least one relativization step and `21` at most.
+There has got to be at least one relativization step and $21$ at most.
 The result is rounded down.
 
-`20` for the `relSteps` parameter and maxing out at `21` have proven to deliver the
+$20$ for the $relSteps$ parameter and maxing out at $21$ have proven to deliver the
 best results.
 More on that later.
 
@@ -196,9 +196,9 @@ relativization steps determining the final rating of the user.
 
 $$ 3 * 0.83 * 1.2 * 0.5 * 3.2 = 1.7808 $$
 
-Here the decimals `0.83`, `1.2`, `0.5` and `3.2` represent a step of
-relativization each. The greater the difference to `1` the greater the impact
-of relativization as `1` would not impact the result at all.
+Here the decimals $0.83$, $1.2$, $0.5$ and $3.2$ represent a step of
+relativization each. The greater the difference to $1$ the greater the impact
+of relativization as $1$ would not impact the result at all.
 
 Here `relRel` configuration comes into play.
 It is added to the relativizationland then the average of these result in the
