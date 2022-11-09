@@ -64,6 +64,18 @@ These are the three main factors used in the relative ranking system.
 These can be referenced to put the absolute value of won rounds into a context.
 Therefore they relativize an absolute number and are thus called "relativizers."
 
+#### Level Of Opponents
+
+TODO
+
+#### Number Of Rounds
+
+TODO
+
+#### Total Number Of Rounds
+
+TODO
+
 ### Relativization Steps
 
 Each calculation of a relative ranking starts with an absolute ranking.
@@ -84,14 +96,12 @@ won rounds.
 
 Each step is the same relativization algorithm applied to the input.
 
-## Algorithm
-
-### Configuration
+#### Configuration
 
 To further fine-tune the balancing of relativization relative ranking system
 uses two configuration parameters.
 
-#### `relSteps`
+##### `relSteps`
 
 `relSteps` is used in a formula to determine the total number of relativization
 steps. \
@@ -121,7 +131,7 @@ The result is rounded down.
 `20` for the `relSteps` parameter and maxing out at `21` have proven to deliver the
 best results. More on that later.
 
-#### `relRel`
+##### `relRel`
 
 `relRel` is used in a formula to influence the impact of each individual
 relativization step.
@@ -157,8 +167,6 @@ the average of all the relativizers including `relRel` to form the new rating
 which is the final rating depending on whether all steps have completed.
 
 $$ R_i = R_{i-1} * {\sum_{k=1}^{3}{rel_k} + a \over 4} $$
-
-
 
 
 
