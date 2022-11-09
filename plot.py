@@ -3,8 +3,11 @@
 import matplotlib.pyplot as plt
 import math
 import sys
+import os
 
 plt.rcParams['text.usetex'] = True
+if os.getenv('DARK', '0') == '1':
+  plt.style.use("dark_background")
 
 xx = range(1, 100)
 for a in [50, 30, 20, 5]:
@@ -15,7 +18,7 @@ plt.ylabel('relativization steps S')
 plt.xlabel('max number of games played of any user')
 plt.legend()
 plt.title(r'$S = \max(\min(\left\lfloor -1+\log(x*.13)*a \right\rceil,21),1)$')
-if len(sys.argv) >= 2 and 'show' == sys.argv[1]:
+if os.getenv('SHOW', '0') == '1':
   plt.show()
 else:
   plt.savefig('images/relsteps.png')
