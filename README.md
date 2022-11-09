@@ -74,6 +74,31 @@ opponents of that user are rated.
 This is perhaps the most obvious relativizer valuing won rounds according to the
 rating of the respective opponent.
 
+$o$ = Number of opponents
+$n$ = Distinct ratings of all all users
+$n_i$ = Position of opponent in $n$
+$w_i$ = Won rounds against opponent
+$t$ = Total won rounds
+
+$$ \sum_{i=1}^{o}{(((n_i+1)/n)^3) * w_i/t} $$
+
+This is averaged so that number of rounds per opponent are accounted for
+proportionally.
+
+Here is the opponent's position to relativization plot for a total of $n=16$
+distinct ratings.
+
+![Quality relativizer](images/quality.png)
+
+The highest rated player -- being at position 16 in $n$ -- is worth a 100
+percent so that the result for $max(n)$ is always $1$.
+Won rounds are exponentially less relativized the higher the opponent is rated.
+
+Exponential makes sense here because ratings for players at the top tend to be 
+more robust.
+For example the difference in skill of a player is likely to be greater between
+first and third place than it is for 20th and 23rd.
+
 #### `farming`
 
 The `farming` relativizer relativizes won rounds in the context of how often
