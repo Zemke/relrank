@@ -126,8 +126,45 @@ best results. More on that later.
 `relRel` is used in a formula to influence the impact of each individual
 relativization step.
 
-Each 
+A relativizer returns a decimal that the number to be relativized is multiplied
+with. The number to be relativized is always the current rating of that user.
+In the first relativization step that is the absolute number of won rounds of
+that user in all subsequent steps it is the rating of that user.
 
-$$ R_1 = R_0 * {\sum_{i=1}^{3}{rel_i} + a \over 4} $$
+In other words: Prior to any relativization, the rating of a user is simply
+that user's won rounds, in all subsequent steps it is the relativization
+result of the previous step. In the first step the won rounds are relativized
+and that result is to be relativized in the next step and so on and so forth.
+
+In that example the three won rounds of a user are passed through four
+relativization steps determining the final rating of the user.
+
+$$ 3 * 0.83 * 1.2 * 0.5 * 3.2 = 1.7808 $$
+
+Here the decimals `0.83`, `1.2`, `0.5` and `3.2` represent a step of
+relativization each. The greater the difference to `1` the greater the impact
+of relativization as `1` would not impact the result at all.
+
+Here `relRel` configuration comes into play. It is added to the relativization
+and then the average of these result in the final relativization.
+
+In practice the average of three relativizers (as mentioned earlier) and
+`relRel` form the final decimal that the rating of the current step is 
+relativized by.
+
+Therefore within reach step the rating of the previous round is multiplied by
+the average of all the relativizers including `relRel` to form the new rating
+which is the final rating depending on whether all steps have completed.
+
+$$ R_i = R_{i-1} * {\sum_{k=1}^{3}{rel_k} + a \over 4} $$
+
+
+
+
+
+
+
+
+
 
 
