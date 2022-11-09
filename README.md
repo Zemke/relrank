@@ -74,10 +74,10 @@ opponents of that user are rated.
 This is perhaps the most obvious relativizer valuing won rounds according to the
 rating of the respective opponent.
 
-$o$ = Number of opponents
-$n$ = Distinct ratings of all all users
-$n_i$ = Position of opponent in $n$
-$w_i$ = Won rounds against opponent
+$o$ = Number of opponents \
+$n$ = Distinct ratings of all all users \
+$n_i$ = Position of opponent in $n$ \
+$w_i$ = Won rounds against opponent \
 $t$ = Total won rounds
 
 $$ \sum_{i=1}^{o}{(((n_i+1)/n)^3) * w_i/t} $$
