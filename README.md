@@ -33,16 +33,19 @@ should get one more points than against a lower ranked player.
 ## Increasingly Relative
 
 In a relative ranking system the points of a user are determined by the points
-of the opponents one has played against. The question is how to you initially
-determine the points of another user when they're not yet ranked.
+of the opponents one has played against.
+The question is how to you initially determine the points of another user when
+they are not yet ranked.
 
 ### Starting Absolute
 
 The most fundamental information that an absolute ranking could be generated
-from is the total won rounds. One gets one points per won round.
+from is the total won rounds.
+One gets one points per won round.
 
-This is now an absolute state. The idea of the relative ranking system is to
-put this absolute rating of each players into perspective — into context.
+This is now an absolute state.
+The idea of the relative ranking system is to put this absolute rating of each
+players into perspective — into context.
 
 ### Relativizers
 
@@ -134,15 +137,17 @@ The user with the maximum number of rounds played on the y-axis and what number
 of relativization steps it would cause on the y-axis.
 
 The graph shows how the number of steps rises logarithmically.
-The greater `relSteps` the steeper the rise. Hence a greater `relSteps` factor
-causes the relativization to be more effect thus weighing in more in the
-balancing ob the absolute number versus the relativized result.
+The greater `relSteps` the steeper the rise.
+Hence a greater `relSteps` factor causes the relativization to be more effect
+thus weighing in more in the balancing ob the absolute number versus the
+relativized result.
 
 There has got to be at least one relativization step and `21` at most.
 The result is rounded down.
 
 `20` for the `relSteps` parameter and maxing out at `21` have proven to deliver the
-best results. More on that later.
+best results.
+More on that later.
 
 ##### `relRel`
 
@@ -150,14 +155,16 @@ best results. More on that later.
 relativization step.
 
 A relativizer returns a decimal that the number to be relativized is multiplied
-with. The number to be relativized is always the current rating of that user.
+with.
+The number to be relativized is always the current rating of that user.
 In the first relativization step that is the absolute number of won rounds of
 that user in all subsequent steps it is the rating of that user.
 
 In other words: Prior to any relativization, the rating of a user is simply
 that user's won rounds, in all subsequent steps it is the relativization
-result of the previous step. In the first step the won rounds are relativized
-and that result is to be relativized in the next step and so on and so forth.
+result of the previous step.
+In the first step the won rounds are relativized and that result is to be
+relativized in the next step and so on and so forth.
 
 In that example the three won rounds of a user are passed through four
 relativization steps determining the final rating of the user.
@@ -168,8 +175,9 @@ Here the decimals `0.83`, `1.2`, `0.5` and `3.2` represent a step of
 relativization each. The greater the difference to `1` the greater the impact
 of relativization as `1` would not impact the result at all.
 
-Here `relRel` configuration comes into play. It is added to the relativization
-and then the average of these result in the final relativization.
+Here `relRel` configuration comes into play.
+It is added to the relativizationland then the average of these result in the
+final relativization.
 
 In practice the average of three relativizers (as mentioned earlier) and
 `relRel` form the final decimal that the rating of the current step is 
