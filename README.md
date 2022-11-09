@@ -50,13 +50,13 @@ Looking at the number of won rounds of each player under which circumstances
 were they actually attained? \
 One is more likely to add won rounds based on these factors:
 
-* level of opponents
-* number of rounds
-* total number of rounds
+* level of opponents (`quality`)
+* number of rounds (`farming`)
+* total number of rounds (`effort`)
 
-These three factors are relative among themselves again. For instance the more
-number of rounds against the same opponent of a weaker skill level, the more
-likely one is to gain won rounds and vice versa. \
+These three factors are relative among themselves again.
+For instance the more number of rounds against the same opponent of a weaker
+skill level, the more likely one is to gain won rounds and vice versa. \
 If one is generally playing for rounds, it's more likely to accumulate won
 rounds, too.
 
@@ -64,17 +64,30 @@ These are the three main factors used in the relative ranking system.
 These can be referenced to put the absolute value of won rounds into a context.
 Therefore they relativize an absolute number and are thus called "relativizers."
 
-#### Level Of Opponents
+#### `quality`
 
-TODO
+The `quality` relativizer relativizes won rounds in the context of how well the
+opponents of that user are rated.
+This is perhaps the most obvious relativizer valuing won rounds according to the
+rating of the respective opponent.
 
-#### Number Of Rounds
+#### `farming`
 
-TODO
+The `farming` relativizer relativizes won rounds in the context of how often
+that user played against the same opponent.
+Each won round weighing less than the previous.
+This retaliates the infamous "noob bashing" where a better
+player repeatedly defeats a very low rated player to farm points from.
 
-#### Total Number Of Rounds
+Additionally this promotes users to have diverse pairings.
+Certainly a user's rating is easier to assess the more data is available. \
+Theoretically you can gain more points from defeating a low rated player for the
+first time than gaining a bazillionth won round against a high rated player.
 
-TODO
+#### `effort`
+
+The `quality` relativizer relativizes won rounds in the context of how many
+rounds in total were played to attain the portion of won rounds.
 
 ### Relativization Steps
 
