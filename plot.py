@@ -16,6 +16,7 @@ def disp(name):
     plt.savefig(name)
 
 
+plt.figure()
 xx = range(1, 100+1)
 for a in [50, 30, 20, 5]:
   yy = [max(min(round(-1+math.log10(x*.13)*a),21),1) for x in xx]
@@ -26,6 +27,7 @@ plt.legend()
 plt.title(r'$S = \max(\min(\left\lfloor -1+\log(x*.13)*a \right\rceil,21),1)$')
 disp('images/relsteps.png')
 
+plt.figure()
 mx=15+1
 xx = range(1, mx)
 yy = [((x+1)/mx)**3 for x in xx]
