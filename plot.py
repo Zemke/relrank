@@ -38,3 +38,13 @@ plt.xlabel('opponent position')
 plt.title(f'$((x+1)/n)^3$')
 disp('images/quality.png')
 
+plt.figure()
+xx = range(1, mx+1)
+yy = [-math.log(x)+1 for x in xx]
+plt.plot(xx, yy)
+plt.ylabel('relativizer')
+plt.xlabel('number of round against same opponent')
+plt.title('y=-ln(x)+1')
+disp('images/farming_fundamental.png')
+
+

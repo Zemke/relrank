@@ -128,7 +128,7 @@ Starting with the fundamental logarithmic function:
 
 $$ y=-ln(x)+1 $$
 
-TODO PLOT
+![Farming fundamental logarithm](images/farming_fundamental.png)
 
 Adding $1$ controls where $y$ intercepts at $x=1$.
 Let's make it variable to make it more clear: $y=-ln(x)+k$
