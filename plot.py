@@ -13,7 +13,7 @@ def disp(name):
   if os.getenv('SHOW', '0') == '1':
     plt.show()
   else:
-    plt.savefig(name)
+    plt.savefig(name, dpi=300)
 
 
 plt.figure()
