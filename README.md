@@ -183,6 +183,16 @@ $$ \sum_{i=1}^{o}{{\sum_{x=1}^{z}{-{99 \over {100 ln(a)}}ln(x)+1} \over z} * w_i
 The `quality` relativizer relativizes won rounds in the context of how many
 rounds in total were played to attain the portion of won rounds.
 
+The total rounds played of each user $x$ are rescaled so that
+
+$$ max(x) \to 1 $$
+
+$$ min(x) \to 0.01 $$
+
+$$ y = a + \frac{(x - \text{min}(x))(b-a)}{\text{max}(x)-\text{min}(x)} $$
+
+![Effort relativizer](images/effort.png)
+
 ### Relativization Steps
 
 Each calculation of a relative ranking starts with an absolute ranking.

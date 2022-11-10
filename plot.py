@@ -60,3 +60,15 @@ plt.xlabel('number of round against same opponent')
 plt.title('y=-(99/(100ln(a)))ln(x)+1')
 disp('images/farming.png')
 
+plt.figure()
+mx=20
+a=mx
+xx = list(range(1, mx+1))
+yy = [.01+(((x-1)*(1-.01))/(mx-1)) for x in xx]
+plt.plot(xx, yy, label=f'a={a}')
+plt.legend()
+plt.ylabel('relativizer')
+plt.xlabel('total number of rounds played')
+plt.title(r'$y = a + {{(x - {\min}(x))(b-a)} \over {{\max}(x)-{\min}(x)}}$')
+disp('images/effort.png')
+
