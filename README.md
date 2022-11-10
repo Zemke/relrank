@@ -161,7 +161,7 @@ with everything in between decreasing towars $0.01$ logarithmically.
 
 $$ -(99/(100ln(a)))ln(x)+1 $$
 
-TODO PLOT
+![Farming relativizer](images/farming.png)
 
 This formula is applied to each round so that $x$ is a set where each number
 represents the $n$-th won round.

@@ -39,6 +39,7 @@ plt.title(f'$((x+1)/n)^3$')
 disp('images/quality.png')
 
 plt.figure()
+mx=100
 xx = range(1, mx+1)
 yy = [-math.log(x)+1 for x in xx]
 plt.plot(xx, yy)
@@ -47,4 +48,15 @@ plt.xlabel('number of round against same opponent')
 plt.title('y=-ln(x)+1')
 disp('images/farming_fundamental.png')
 
+plt.figure()
+mx=100
+a=mx
+xx = range(1, mx+1)
+yy = [-(99/(100*math.log(a)))*math.log(x)+1 for x in xx]
+plt.plot(xx, yy, label=f'a={a}')
+plt.legend()
+plt.ylabel('relativizer')
+plt.xlabel('number of round against same opponent')
+plt.title('y=-(99/(100ln(a)))ln(x)+1')
+disp('images/farming.png')
 
