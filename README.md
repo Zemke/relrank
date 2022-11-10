@@ -112,6 +112,72 @@ Certainly a user's rating is easier to assess the more data is available. \
 Theoretically you can gain more points from defeating a low rated player for the
 first time than gaining a bazillionth won round against a high rated player.
 
+The relativizer is made so that per opponent the first round is always worth $1$
+as in 100 percent.
+Then the value of each next won round decreases logarithmically.
+The logarithm is negative natural.
+It decreases until $0.01$ which is the least value a round can have as per the
+`farming` relativizer.
+It is given to the round of the maximum won rounds any player has against another.
+This value is $a$.
+
+This is the important concept here.
+Scaling the value of won rounds from $1$ to $0.01$ negatively logarithmically.
+
+Starting with the fundamental logarithmic function:
+
+$$ y=-ln(x)+1 $$
+
+TODO PLOT
+
+Adding $1$ controls where $y$ intercepts at $x=1$.
+Let's make it variable to make it more clear: $y=-ln(x)+k$
+It is desired to make it so that when $x=1$ and $k=1$ then $y$ should resolve
+to $1$.
+This is because $x$ is the round and the first round should always be valued at
+a 100 percent, $1$ respectively.
+
+Now the curve needs to be adjusted so that $y=0.01$ when $x=a$.
+Since $-ln(x)+1 = -z * ln(x)+1$ where $a=1$, it can resolve for $z$ for when
+$y=0.01$.
+
+$$ 0.01=-z * ln(x)+1 $$
+
+$$ z={99 \over 100ln(a)} $$
+
+The formula ends up like this:
+
+$$ y = -{99 \over {100 ln(a)}}ln(x)+1 $$
+
+The boundaries are for the first round
+
+$$ a=x \to y=0.01 $$
+
+and maximum round respectively
+
+$$ x=1 \to y=1 $$
+
+with everything in between decreasing towars $0.01$ logarithmically.
+
+$$ -(99/(100ln(a)))ln(x)+1 $$
+
+TODO PLOT
+
+This formula is applied to each round so that $x$ is a set where each number
+represents the $n$-th won round.
+
+$$ X = \lbrace 1, 2, 3, 4, ... \rbrace $$
+
+This is added and divided by the total number of rounds against that opponent.
+This is the average.
+
+$$ {-{99 \over {100 ln(a)}}ln(x)+1} \over z $$
+
+This is the per opponent and yet again averaged across all opponents.
+The final formula to output the factor of relativization:
+
+$$ \sum_{i=1}^{o}{{\sum_{x=1}^{z}{-{99 \over {100 ln(a)}}ln(x)+1} \over z} * w_i/t} $$
+
 #### `effort`
 
 The `quality` relativizer relativizes won rounds in the context of how many
