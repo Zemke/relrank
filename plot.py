@@ -31,9 +31,10 @@ plt.figure()
 mx=15+1
 xx = range(1, mx)
 yy = [((x+1)/mx)**3 for x in xx]
-plt.plot(xx, yy)
+plt.plot(xx, yy, label=f"n={mx}")
+plt.legend()
 plt.ylabel('relativizer')
-plt.xlabel('opp position')
-plt.title(f'$((x+1)/{mx})^3$')
+plt.xlabel('opponent position')
+plt.title(f'$((x+1)/n)^3$')
 disp('images/quality.png')
 
