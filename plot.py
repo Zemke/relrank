@@ -28,8 +28,8 @@ plt.title(r'$S = \max(\min(\left\lfloor -1+\log(x*.13)*a \right\rceil,21),1)$')
 disp('images/relsteps.png')
 
 plt.figure()
-mx=15+1
-xx = range(1, mx)
+mx=15
+xx = range(1, mx+1)
 yy = [((x+1)/mx)**3 for x in xx]
 plt.plot(xx, yy, label=f"n={mx}")
 plt.legend()
