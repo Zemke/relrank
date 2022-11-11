@@ -33,8 +33,8 @@ func calcSteps(G []game) int {
   }
   t := map[int]int{}
   for _, g := range G {
-    t[g.hi] += g.hs
-    t[g.ai] += g.as
+    t[g.hi] += g.hs + g.as
+    t[g.ai] += g.hs + g.as
   }
   mx := -1
   for _, s := range t {
