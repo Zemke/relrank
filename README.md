@@ -295,3 +295,32 @@ which is the final rating depending on whether all steps have completed.
 
 $$ R_i = R_{i-1} * {\sum_{k=1}^{3}{rel_k} + a \over 4} $$
 
+## Output Scaling
+
+The algorithm produces rather insane numbers. For example a user with $163$
+rounds played total of which are $127$ won could potentially end up with a
+rating of
+
+$$ 18790682468510068.97010341750068103636621585494299294818077987802741 $$
+
+depending on the scale that is set for decimals.
+
+To make the numbers more pleasing for displaying to the end-user in a ladder
+the numbers can be rescaled using min-max normalization.
+
+Consider $a$ to be the number of points the lowest rated player should have
+and $b$ the number of points the highest rated player should have.
+
+$$ a + \frac{(x - {min}(x))(b-a)}{{max}(x)-{min}(x)} $$
+
+To make numbers increase as more rounds are played one can make $b$ the
+maximum number of rounds of any player. This adds to points being more
+relatable over time.
+In the relative ranking system everyone's points may change with just one new
+round played.
+
+## More
+
+The ranking system relies on rounds won and doesn't care about games.
+You can have even drawn games.
+
