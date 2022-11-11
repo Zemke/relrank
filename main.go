@@ -83,11 +83,45 @@ func main() {
   for i, g := range G {
     fmt.Println(i, g)
   }
-  fmt.Printf("steps: %d\n", calcSteps(G))
-  relRel, err := strconv.Atoi(getenv("RELRANK_RELREL", "20"));
+  steps := calcSteps(G)
+  fmt.Printf("steps: %d\n", steps)
+  relRel, err := strconv.ParseFloat(getenv("RELRANK_RELREL", "20"), 64);
   if err != nil {
     fmt.Println("RELRANK_RELREL is not a number")
   }
+  R := map[int]float64{}
+  for _, g := range G {
+    R[g.hi] += float64(g.hs)
+    R[g.ai] += float64(g.as)
+  }
   fmt.Println("relRel:", relRel)
+  for i := 1; i <= steps; i++ {
+    for u, r := range R {
+      relis := [4]float64{
+        relRel,
+        byQuality(u, r, R, G),
+        byFarming(u, r, R, G),
+        byEffort(u, r, R, G),
+      }
+      sm := 0.
+      for _, reli := range relis {
+        sm += reli
+      }
+      rel := sm / float64(len(relis))
+      fmt.Println("rel:", rel)
+    }
+  }
+}
+
+func byQuality(u int, r float64, R map[int]float64, G []game) float64 {
+  return 1.
+}
+
+func byFarming(u int, r float64, R map[int]float64, G []game) float64 {
+  return 1.
+}
+
+func byEffort(u int, r float64, R map[int]float64, G []game) float64 {
+  return 1.
 }
 
