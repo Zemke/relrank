@@ -112,7 +112,7 @@ func main() {
     }
   }
   for u, r := range R {
-    fmt.Println(u, r)
+    fmt.Printf("%d,%f\n", u, r)
   }
 }
 
