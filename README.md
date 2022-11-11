@@ -12,6 +12,13 @@ The CLI application should allow for usage outside of Worms League or any
 particular league so that it can supplied only with games played and output
 the ranking.
 
+## Usage
+
+TODO document usage of of Go CLI app.
+
+Planned input is a CSV in format
+`user_a_id, user_b_id, user_a_rounds, user_b_rounds`.
+
 ## Problem
 
 In the public world one is accustomed to absolute ranking system.
