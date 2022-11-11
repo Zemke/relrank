@@ -324,3 +324,24 @@ round played.
 The ranking system relies on rounds won and doesn't care about games.
 You can have even drawn games.
 
+## Testing
+
+The algorithm is tested against another ranking system that is regarded as the
+best in Worms Armageddon online play.
+
+The current specifics is that the root mean-squared error is $20.7335$ and the
+mean absolute error is $13.63083$ for points that range from $2$ to $317$.
+
+Many of the magic numbers in the formulas provided in this documentation
+originate from experimentation to drive down the root mean-squared error.
+
+## Root Mean-Squared Error
+
+There is testing in place making sure RMSE doesn't increase.
+
+$$ 20.7335 = \sqrt{(\frac{1}{n})\sum_{i=1}^{n}(y_{i} - x_{i})^{2}} $$
+
+## Mean Absolute Error
+
+$$ 13.63083 = \sum_{i=1}^{D}|x_i-y_i| $$
+
