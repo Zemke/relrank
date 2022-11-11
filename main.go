@@ -52,7 +52,7 @@ func main() {
   if (stat.Mode() & os.ModeCharDevice) == 0 {
     reader := bufio.NewReader(os.Stdin)
     ll, _ := reader.ReadString('\n')
-    for true {
+    for {
       l, _ := reader.ReadString('\n')
       if l == "EOF" {
         break
