@@ -7,6 +7,13 @@ import (
   "os"
 )
 
+func getenv(env string, def string) string {
+  if v, ok := os.LookupEnv(env); ok {
+    return v
+  }
+  return def
+}
+
 func main() {
   stat, _ := os.Stdin.Stat()
   var G []string
@@ -31,5 +38,8 @@ func main() {
   for i, g := range G {
     fmt.Println(i, g)
   }
+  relRel := getenv("RELRANK_RELREL", "15.9")
+  relSteps := getenv("RELRANK_RELSTEPS", "20")
+  fmt.Printf("relRel:%s relSteps:%s\n", relRel, relSteps)
 }
 
