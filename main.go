@@ -71,13 +71,14 @@ func main() {
   for _, l := range inp {
     sp := strings.Split(l, ",")
     var vv, err = [...]interface{}{sp[0], sp[1], sp[2], sp[3]}, error(nil)
+    gvv := [4]int{}
     for i, v := range vv  {
-      if vv[i], err = strconv.Atoi(v.(string)); err != nil {
+      if gvv[i], err = strconv.Atoi(v.(string)); err != nil {
         fmt.Printf("%s is not an integer", vv[i])
         os.Exit(1)
       }
     }
-    G = append(G, game{vv[0].(int), vv[1].(int), vv[2].(int), vv[3].(int)})
+    G = append(G, game{gvv[0], gvv[1], gvv[2], gvv[3]})
   }
   for i, g := range G {
     fmt.Println(i, g)
