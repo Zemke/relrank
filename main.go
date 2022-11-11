@@ -27,6 +27,7 @@ var RELREL = getenv("RELRANK_RELREL", "20")
 
 func calcSteps(G []game) int {
   var relSteps, err = strconv.ParseFloat(getenv("RELRANK_RELTEPS", "15.9"), 64)
+  fmt.Println("relSteps:", relSteps)
   if err != nil {
     fmt.Printf("%f is invalid for RELRANK_RELSTEPS\n", relSteps)
     os.Exit(1)
