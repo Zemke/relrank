@@ -5,7 +5,16 @@ import (
   "strings"
   "bufio"
   "os"
+  "math"
+  "strconv"
 )
+
+type game struct {
+  hi int  // home user id
+  ai int  // away user id
+  hs int  // home user score
+  as int  // away user score
+}
 
 func getenv(env string, def string) string {
   if v, ok := os.LookupEnv(env); ok {
@@ -14,20 +23,43 @@ func getenv(env string, def string) string {
   return def
 }
 
+var RELREL = getenv("RELRANK_RELREL", "20")
+
+func calcSteps(G []game) int {
+  var relSteps, err = strconv.ParseFloat(getenv("RELRANK_RELTEPS", "15.9"), 64)
+  if err != nil {
+    fmt.Printf("%f is invalid for RELRANK_RELSTEPS\n", relSteps)
+    os.Exit(1)
+  }
+  t := map[int]int{}
+  for _, g := range G {
+    t[g.hi] += g.hs
+    t[g.ai] += g.as
+  }
+  mx := -1
+  for _, s := range t {
+    if s > mx {
+      mx = s
+    }
+  }
+  steps := -1 + math.Log10(float64(mx) * float64(.13)) * relSteps
+  return int(math.Max(math.Min(math.Round(steps), 21), 1))
+}
+
 func main() {
   stat, _ := os.Stdin.Stat()
-  var G []string
+  var inp []string
   if (stat.Mode() & os.ModeCharDevice) == 0 {
     reader := bufio.NewReader(os.Stdin)
-    inp, _ := reader.ReadString('\n')
+    ll, _ := reader.ReadString('\n')
     for true {
-      text, _ := reader.ReadString('\n')
-      if text == "EOF" {
+      l, _ := reader.ReadString('\n')
+      if l == "EOF" {
         break
       }
-      inp = inp + text
+      ll += l
     }
-    G = strings.Split(inp[:len(inp)-1], "\n")
+    inp = strings.Split(ll[:len(ll)-1], "\n")
   } else {
     if len(os.Args) > 1 {
       file := os.Args[1]
@@ -35,11 +67,21 @@ func main() {
       os.Exit(1)
     }
   }
+  var G []game
+  for _, l := range inp {
+    sp := strings.Split(l, ",")
+    var vv, err = [...]interface{}{sp[0], sp[1], sp[2], sp[3]}, error(nil)
+    for i, v := range vv  {
+      if vv[i], err = strconv.Atoi(v.(string)); err != nil {
+        fmt.Printf("%s is not an integer", vv[i])
+        os.Exit(1)
+      }
+    }
+    G = append(G, game{vv[0].(int), vv[1].(int), vv[2].(int), vv[3].(int)})
+  }
   for i, g := range G {
     fmt.Println(i, g)
   }
-  relRel := getenv("RELRANK_RELREL", "15.9")
-  relSteps := getenv("RELRANK_RELSTEPS", "20")
-  fmt.Printf("relRel:%s relSteps:%s\n", relRel, relSteps)
+  fmt.Printf("steps: %d\n", calcSteps(G))
 }
 
