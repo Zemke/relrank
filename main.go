@@ -23,7 +23,6 @@ func getenv(env string, def string) string {
   return def
 }
 
-var RELREL = getenv("RELRANK_RELREL", "20")
 
 func calcSteps(G []game) int {
   var relSteps, err = strconv.ParseFloat(getenv("RELRANK_RELTEPS", "15.9"), 64)
@@ -85,5 +84,10 @@ func main() {
     fmt.Println(i, g)
   }
   fmt.Printf("steps: %d\n", calcSteps(G))
+  relRel, err := strconv.Atoi(getenv("RELRANK_RELREL", "20"));
+  if err != nil {
+    fmt.Println("RELRANK_RELREL is not a number")
+  }
+  fmt.Println("relRel:", relRel)
 }
 
