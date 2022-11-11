@@ -7,6 +7,11 @@ Ranking system for ladder rankings where games are won in best out of X rounds.
 The relative ranking system is currently implemented in PHP as part of
 [Worms League](https://github.com/Zemke/worms-league).
 
+It is planned to reimplement is using Go.
+The CLI application should allow for usage outside of Worms League or any
+particular league so that it can supplied only with games played and output
+the ranking.
+
 ## Problem
 
 In the public world one is accustomed to absolute ranking system.
