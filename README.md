@@ -290,11 +290,3 @@ which is the final rating depending on whether all steps have completed.
 
 $$ R_i = R_{i-1} * {\sum_{k=1}^{3}{rel_k} + a \over 4} $$
 
-
-
-
-
-
-
-
-
