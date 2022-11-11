@@ -108,8 +108,11 @@ func main() {
         sm += reli
       }
       rel := sm / float64(len(relis))
-      fmt.Println("rel:", rel)
+      R[u] = R[u] * rel
     }
+  }
+  for u, r := range R {
+    fmt.Println(u, r)
   }
 }
 
