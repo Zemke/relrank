@@ -194,7 +194,7 @@ $$ max(x) \to 1 $$
 
 $$ min(x) \to 0.01 $$
 
-$$ y = a + \frac{(x - \text{min}(x))(b-a)}{\text{max}(x)-\text{min}(x)} $$
+$$ y = a + \frac{(x - {min}(x))(b-a)}{{max}(x)-{min}(x)} $$
 
 ![Effort relativizer](images/effort.png)
 
