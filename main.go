@@ -89,12 +89,24 @@ func main() {
   if err != nil {
     fmt.Println("RELRANK_RELREL is not a number")
   }
+  fmt.Println("relRel:", relRel)
   R := map[int]float64{}
   for _, g := range G {
     R[g.hi] += float64(g.hs)
     R[g.ai] += float64(g.as)
   }
-  fmt.Println("relRel:", relRel)
+  OPP := map[int]map[int]int{}
+  for u, _ := range R {
+    OPP[u] = map[int]int{}
+    for _, g := range G {
+      if u == g.hi {
+        OPP[u][g.ai] += g.hs
+      } else if u == g.ai {
+        OPP[u][g.hi] += g.as
+      }
+    }
+  }
+  fmt.Println(OPP)
   for i := 1; i <= steps; i++ {
     for u, r := range R {
       relis := [4]float64{
