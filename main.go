@@ -111,9 +111,9 @@ func main() {
     for u, r := range R {
       relis := [4]float64{
         relRel,
-        byQuality(u, r, R, G),
-        byFarming(u, r, R, G),
-        byEffort(u, r, R, G),
+        byQuality(u, r, R, OPP, G),
+        byFarming(u, r, R, OPP, G),
+        byEffort(u, r, R, OPP, G),
       }
       sm := 0.
       for _, reli := range relis {
@@ -128,15 +128,15 @@ func main() {
   }
 }
 
-func byQuality(u int, r float64, R map[int]float64, G []game) float64 {
+func byQuality(u int, r float64, R map[int]float64, OPP map[int]map[int]int, G []game) float64 {
   return 1.
 }
 
-func byFarming(u int, r float64, R map[int]float64, G []game) float64 {
+func byFarming(u int, r float64, R map[int]float64, OPP map[int]map[int]int, G []game) float64 {
   return 1.
 }
 
-func byEffort(u int, r float64, R map[int]float64, G []game) float64 {
+func byEffort(u int, r float64, R map[int]float64, OPP map[int]map[int]int, G []game) float64 {
   return 1.
 }
 
