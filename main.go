@@ -108,6 +108,7 @@ func main() {
   }
   fmt.Println(OPP)
   for i := 1; i <= steps; i++ {
+    rels := map[int]float64{}
     for u, r := range R {
       relis := [4]float64{
         relRel,
@@ -119,8 +120,10 @@ func main() {
       for _, reli := range relis {
         sm += reli
       }
-      rel := sm / float64(len(relis))
-      R[u] = R[u] * rel
+      rels[u] = sm / float64(len(relis))
+    }
+    for u, rel := range rels {
+      R[u] *= rel
     }
   }
   for u, r := range R {
