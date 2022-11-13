@@ -17,6 +17,14 @@ type game struct {
   as int64  // away user score
 }
 
+type relParam struct {
+  u int64
+  r decimal.Decimal
+  R map[int64]decimal.Decimal
+  OPP map[int64]map[int64]int64
+  G []game
+}
+
 func getenv(env string, def string) string {
   if v, ok := os.LookupEnv(env); ok {
     return v
@@ -118,10 +126,11 @@ func main() {
   for i := 1; i <= steps; i++ {
     rels := map[int64]decimal.Decimal{}
     for u, r := range R {
+      p := relParam{u: u, r: r, R: R, OPP: OPP, G: G}
       relis := []decimal.Decimal{
-        byQuality(u, r, R, OPP, G),
-        byFarming(u, r, R, OPP, G),
-        byEffort(u, r, R, OPP, G),
+        byQuality(p),
+        byFarming(p),
+        byEffort(p),
       }
       sm := decimal.Sum(relRel, relis...)
       rels[u] = sm.Div(decimal.NewFromInt(int64(len(relis)+1)))
@@ -135,15 +144,15 @@ func main() {
   }
 }
 
-func byQuality(u int64, r decimal.Decimal, R map[int64]decimal.Decimal, OPP map[int64]map[int64]int64, G []game) decimal.Decimal {
+func byQuality(P relParam) decimal.Decimal {
   return decimal.NewFromInt(1)
 }
 
-func byFarming(u int64, r decimal.Decimal, R map[int64]decimal.Decimal, OPP map[int64]map[int64]int64, G []game) decimal.Decimal {
+func byFarming(P relParam) decimal.Decimal {
   return decimal.NewFromInt(1)
 }
 
-func byEffort(u int64, r decimal.Decimal, R map[int64]decimal.Decimal, OPP map[int64]map[int64]int64, G []game) decimal.Decimal {
+func byEffort(P relParam) decimal.Decimal {
   return decimal.NewFromInt(1)
 }
 
