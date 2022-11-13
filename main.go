@@ -25,13 +25,18 @@ type relParam struct {
   G []game
 }
 
+type total struct {
+  mn decimal.Decimal
+  mx decimal.Decimal
+  peru map[int64]int64
+}
+
 func getenv(env string, def string) string {
   if v, ok := os.LookupEnv(env); ok {
     return v
   }
   return def
 }
-
 
 func calcSteps(G []game) int {
   var relSteps, err = strconv.ParseFloat(getenv("RELRANK_RELTEPS", "15.9"), 64)
@@ -111,17 +116,32 @@ func main() {
     R[g.hi] = R[g.hi].Add(decimal.NewFromInt(g.hs))
     R[g.ai] = R[g.ai].Add(decimal.NewFromInt(g.as))
   }
+  T := total{ peru: map[int64]int64{}, }
   OPP := map[int64]map[int64]int64{}
   for u, _ := range R {
     OPP[u] = map[int64]int64{}
     for _, g := range G {
       if u == g.hi {
         OPP[u][g.ai] += g.hs
+        T.peru[u] += g.hs + g.as
       } else if u == g.ai {
         OPP[u][g.hi] += g.as
+        T.peru[u] += g.hs + g.as
       }
     }
   }
+  var mn int64 = 0
+  var mx int64 = 0
+  for _, w := range T.peru {
+    if mn > w {
+      mn = w
+    }
+    if mx < w {
+      mx = w
+    }
+  }
+  T.mn = decimal.NewFromInt(mn)
+  T.mx = decimal.NewFromInt(mx)
   fmt.Println(OPP)
   for i := 1; i <= steps; i++ {
     rels := map[int64]decimal.Decimal{}
@@ -130,7 +150,7 @@ func main() {
       relis := []decimal.Decimal{
         byQuality(p),
         byFarming(p),
-        byEffort(p),
+        byEffort(p, T),
       }
       sm := decimal.Sum(relRel, relis...)
       rels[u] = sm.Div(decimal.NewFromInt(int64(len(relis)+1)))
@@ -152,7 +172,10 @@ func byFarming(P relParam) decimal.Decimal {
   return decimal.NewFromInt(1)
 }
 
-func byEffort(P relParam) decimal.Decimal {
-  return decimal.NewFromInt(1)
+func byEffort(P relParam, T total) decimal.Decimal {
+  a := decimal.RequireFromString("0.01")
+  b := decimal.RequireFromString("1")
+  x := decimal.NewFromInt(T.peru[P.u])
+  return a.Add(x.Sub(T.mn).Mul(b.Sub(a)).Div(T.mx.Sub(T.mn)))
 }
 
