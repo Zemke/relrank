@@ -11,10 +11,10 @@ import (
 )
 
 type game struct {
-  hi int  // home user id
-  ai int  // away user id
-  hs int  // home user score
-  as int  // away user score
+  hi int64  // home user id
+  ai int64  // away user id
+  hs int64  // home user score
+  as int64  // away user score
 }
 
 func getenv(env string, def string) string {
@@ -32,12 +32,12 @@ func calcSteps(G []game) int {
     fmt.Printf("%f is invalid for RELRANK_RELSTEPS\n", relSteps)
     os.Exit(1)
   }
-  t := map[int]int{}
+  t := map[int64]int64{}
   for _, g := range G {
     t[g.hi] += g.hs + g.as
     t[g.ai] += g.hs + g.as
   }
-  mx := -1
+  var mx int64 = -1
   for _, s := range t {
     if s > mx {
       mx = s
@@ -72,9 +72,9 @@ func main() {
   for _, l := range inp {
     sp := strings.Split(l, ",")
     var vv, err = [...]interface{}{sp[0], sp[1], sp[2], sp[3]}, error(nil)
-    gvv := [4]int{}
+    gvv := [4]int64{}
     for i, v := range vv  {
-      if gvv[i], err = strconv.Atoi(v.(string)); err != nil {
+      if gvv[i], err = strconv.ParseInt(v.(string), 10, 64); err != nil {
         fmt.Printf("%s is not an integer", vv[i])
         os.Exit(1)
       }
@@ -86,19 +86,19 @@ func main() {
   }
   steps := calcSteps(G)
   fmt.Printf("steps: %d\n", steps)
-  relRel, err := strconv.ParseFloat(getenv("RELRANK_RELREL", "20"), 64);
+  relRel, err := decimal.NewFromString(getenv("RELRANK_RELREL", "20"));
   if err != nil {
     fmt.Println("RELRANK_RELREL is not a number")
   }
   fmt.Println("relRel:", relRel)
-  R := map[int]float64{}
+  R := map[int64]decimal.Decimal{}
   for _, g := range G {
-    R[g.hi] += float64(g.hs)
-    R[g.ai] += float64(g.as)
+    R[g.hi] = R[g.hi].Add(decimal.NewFromInt(g.hs))
+    R[g.ai] = R[g.ai].Add(decimal.NewFromInt(g.as))
   }
-  OPP := map[int]map[int]int{}
+  OPP := map[int64]map[int64]int64{}
   for u, _ := range R {
-    OPP[u] = map[int]int{}
+    OPP[u] = map[int64]int64{}
     for _, g := range G {
       if u == g.hi {
         OPP[u][g.ai] += g.hs
@@ -109,38 +109,40 @@ func main() {
   }
   fmt.Println(OPP)
   for i := 1; i <= steps; i++ {
-    rels := map[int]float64{}
+    rels := map[int64]decimal.Decimal{}
     for u, r := range R {
-      relis := [4]float64{
+      relis := [4]decimal.Decimal{
         relRel,
         byQuality(u, r, R, OPP, G),
         byFarming(u, r, R, OPP, G),
         byEffort(u, r, R, OPP, G),
       }
-      sm := 0.
-      for _, reli := range relis {
-        sm += reli
-      }
-      rels[u] = sm / float64(len(relis))
+      sm := decimal.Sum(
+        relRel,
+        byQuality(u, r, R, OPP, G),
+        byFarming(u, r, R, OPP, G),
+        byEffort(u, r, R, OPP, G),
+      )
+      rels[u] = sm.Div(decimal.NewFromInt(int64(len(relis))))
     }
     for u, rel := range rels {
-      R[u] *= rel
+      R[u] = R[u].Mul(rel)
     }
   }
   for u, r := range R {
-    fmt.Printf("%d,%f\n", u, r)
+    fmt.Printf("%d,%s\n", u, r)
   }
 }
 
-func byQuality(u int, r float64, R map[int]float64, OPP map[int]map[int]int, G []game) float64 {
-  return 1.
+func byQuality(u int64, r decimal.Decimal, R map[int64]decimal.Decimal, OPP map[int64]map[int64]int64, G []game) decimal.Decimal {
+  return decimal.NewFromInt(1)
 }
 
-func byFarming(u int, r float64, R map[int]float64, OPP map[int]map[int]int, G []game) float64 {
-  return 1.
+func byFarming(u int64, r decimal.Decimal, R map[int64]decimal.Decimal, OPP map[int64]map[int64]int64, G []game) decimal.Decimal {
+  return decimal.NewFromInt(1)
 }
 
-func byEffort(u int, r float64, R map[int]float64, OPP map[int]map[int]int, G []game) float64 {
-  return 1.
+func byEffort(u int64, r decimal.Decimal, R map[int64]decimal.Decimal, OPP map[int64]map[int64]int64, G []game) decimal.Decimal {
+  return decimal.NewFromInt(1)
 }
 
