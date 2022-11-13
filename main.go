@@ -48,6 +48,13 @@ func calcSteps(G []game) int {
 }
 
 func main() {
+  prec, err := strconv.Atoi(getenv("RELRANK_PREC", "50"))
+  if err != nil {
+    fmt.Println("Precision from RELRANK_PREC is invalid - should be int")
+    os.Exit(1)
+  }
+  decimal.DivisionPrecision = prec
+  fmt.Println("precision:", decimal.DivisionPrecision)
   stat, _ := os.Stdin.Stat()
   var inp []string
   if (stat.Mode() & os.ModeCharDevice) == 0 {
