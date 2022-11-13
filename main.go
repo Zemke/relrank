@@ -118,19 +118,13 @@ func main() {
   for i := 1; i <= steps; i++ {
     rels := map[int64]decimal.Decimal{}
     for u, r := range R {
-      relis := [4]decimal.Decimal{
-        relRel,
+      relis := []decimal.Decimal{
         byQuality(u, r, R, OPP, G),
         byFarming(u, r, R, OPP, G),
         byEffort(u, r, R, OPP, G),
       }
-      sm := decimal.Sum(
-        relRel,
-        byQuality(u, r, R, OPP, G),
-        byFarming(u, r, R, OPP, G),
-        byEffort(u, r, R, OPP, G),
-      )
-      rels[u] = sm.Div(decimal.NewFromInt(int64(len(relis))))
+      sm := decimal.Sum(relRel, relis...)
+      rels[u] = sm.Div(decimal.NewFromInt(int64(len(relis)+1)))
     }
     for u, rel := range rels {
       R[u] = R[u].Mul(rel)
