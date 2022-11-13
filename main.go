@@ -150,7 +150,7 @@ func main() {
       relis := []decimal.Decimal{
         byQuality(p),
         byFarming(p),
-        byEffort(p, T),
+        byEffort(u, T),
       }
       sm := decimal.Sum(relRel, relis...)
       rels[u] = sm.Div(decimal.NewFromInt(int64(len(relis)+1)))
@@ -172,10 +172,10 @@ func byFarming(P relParam) decimal.Decimal {
   return decimal.NewFromInt(1)
 }
 
-func byEffort(P relParam, T total) decimal.Decimal {
+func byEffort(u int64, T total) decimal.Decimal {
   a := decimal.RequireFromString("0.01")
   b := decimal.RequireFromString("1")
-  x := decimal.NewFromInt(T.peru[P.u])
+  x := decimal.NewFromInt(T.peru[u])
   return a.Add(x.Sub(T.mn).Mul(b.Sub(a)).Div(T.mx.Sub(T.mn)))
 }
 
