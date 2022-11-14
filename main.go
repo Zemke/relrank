@@ -34,12 +34,6 @@ type total struct {
   peru map[int64]int64
 }
 
-type sortedRanking struct {
-  uu []int64
-  r decimal.Decimal
-  p int64
-}
-
 func getenv(env string, def string) string {
   if v, ok := os.LookupEnv(env); ok {
     return v
@@ -49,7 +43,6 @@ func getenv(env string, def string) string {
 
 func calcSteps(G []game) int {
   var relSteps, err = strconv.ParseFloat(getenv("RELRANK_RELTEPS", "15.9"), 64)
-  dd("relSteps:", relSteps)
   dd("relSteps:", relSteps)
   if err != nil {
     fmt.Printf("%f is invalid for RELRANK_RELSTEPS\n", relSteps)
@@ -168,11 +161,11 @@ func main() {
     }
   }
   for i := 1; i <= steps; i++ {
-    rr := sortRankings(R)
+    rn := sortRankings(R)
     rels := map[int64]decimal.Decimal{}
     for u, _ := range R {
       relis := []decimal.Decimal{
-        byQuality(OPP[u], WT[u], rr, u),
+        byQuality(OPP[u], WT[u], rn[u], int64(len(rn)), u),
         byFarming(mxWonOpp, T.peru[u], OPP[u]),
         byEffort(u, T),
       }
@@ -188,49 +181,58 @@ func main() {
   }
 }
 
-func sortRankings(R map[int64]decimal.Decimal) []sortedRanking {
-    rankings := []decimal.Decimal{}
-    for _, r := range R {
-      rankings = append(rankings, r)
+func sortRankings(R map[int64]decimal.Decimal) map[int64]int64 {
+  rankings := []decimal.Decimal{}
+  for _, r := range R {
+    rankings = append(rankings, r)
+  }
+  sort.Slice(rankings, func (i, j int) bool {
+    return rankings[i].Cmp(rankings[j]) < 0
+  })
+  type sortedRanking struct {
+    uu []int64
+    r decimal.Decimal
+    p int64
+  }
+  rn := []sortedRanking{}
+  for i, r := range rankings {
+    sr := sortedRanking{ r: r, p: int64(i), uu: []int64{} }
+    for u, r1 := range R {
+      if r == r1 {
+        sr.uu = append(sr.uu, u)
+      }
     }
-    sort.Slice(rankings, func (i, j int) bool {
-      return rankings[i].Cmp(rankings[j]) < 0
-    })
-    srr := []sortedRanking{}
-    for i, r := range rankings {
-      sr := sortedRanking{ r: r, p: int64(i), uu: []int64{} }
-      for u, r1 := range R {
-        if r == r1 {
-          sr.uu = append(sr.uu, u)
+    rn = append(rn, sr)
+  }
+  srr := map[int64]int64{}
+  for u, _ := range R {
+    srr[u] = -1
+    for _, r := range rn {
+      for _, u1 := range r.uu {
+        if u1 == u {
+          srr[u] = r.p
+          //rru = r.p
+          break
         }
       }
-      srr = append(srr, sr)
-    }
-    return srr
-}
-
-func byQuality(o map[int64]int64, w int64, rr []sortedRanking, u int64) decimal.Decimal {
-  var rru int64 = -1
-  for _, r := range rr {
-    for _, u1 := range r.uu {
-      if u1 == u {
-        rru = r.p
+      if srr[u] != -1 {
         break
       }
     }
-    if rru != -1 {
-      break
+    if srr[u] == -1 {
+      fmt.Println("user p not found")
+      os.Exit(1)
     }
   }
-  if rru == -1 {
-    fmt.Println("user p not found")
-    os.Exit(1)
-  }
+  return srr
+}
+
+func byQuality(o map[int64]int64, w int64, rn int64, rrlen int64, u int64) decimal.Decimal {
   rel := decimal.Zero
   wt := decimal.NewFromInt(w)
-  L := decimal.NewFromInt(int64(len(rr)))
+  L := decimal.NewFromInt(rrlen)
   for _, w := range o {
-    y := decimal.NewFromInt(rru+1).Div(L).Pow(d3)
+    y := decimal.NewFromInt(rn+1).Div(L).Pow(d3)
     rel = rel.Add(y.Mul(decimal.NewFromInt(w).Div(wt)));
   }
   return d1
