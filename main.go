@@ -18,6 +18,7 @@ var d1 = decimal.NewFromInt(1)
 var dn1 = decimal.NewFromInt(-1)
 var d3 = decimal.NewFromInt(3)
 var dmx = d1
+var debug = getenv("DEBUG", "0")
 
 type game struct {
   hi int64  // home user id
@@ -48,7 +49,8 @@ func getenv(env string, def string) string {
 
 func calcSteps(G []game) int {
   var relSteps, err = strconv.ParseFloat(getenv("RELRANK_RELTEPS", "15.9"), 64)
-  fmt.Println("relSteps:", relSteps)
+  dd("relSteps:", relSteps)
+  dd("relSteps:", relSteps)
   if err != nil {
     fmt.Printf("%f is invalid for RELRANK_RELSTEPS\n", relSteps)
     os.Exit(1)
@@ -75,7 +77,7 @@ func main() {
     os.Exit(1)
   }
   decimal.DivisionPrecision = prec
-  fmt.Println("precision:", decimal.DivisionPrecision)
+  dd("precision:", decimal.DivisionPrecision)
   stat, _ := os.Stdin.Stat()
   var inp []string
   if (stat.Mode() & os.ModeCharDevice) == 0 {
@@ -110,21 +112,21 @@ func main() {
     G = append(G, game{gvv[0], gvv[1], gvv[2], gvv[3]})
   }
   for i, g := range G {
-    fmt.Println(i, g)
+    dd(i, g)
   }
   steps := calcSteps(G)
-  fmt.Printf("steps: %d\n", steps)
+  dd("steps:", steps)
   relRel, err := decimal.NewFromString(getenv("RELRANK_RELREL", "20"));
   if err != nil {
     fmt.Println("RELRANK_RELREL is not a number")
   }
-  fmt.Println("relRel:", relRel)
+  dd("relRel:", relRel)
   R := map[int64]decimal.Decimal{}
   for _, g := range G {
     R[g.hi] = R[g.hi].Add(decimal.NewFromInt(g.hs))
     R[g.ai] = R[g.ai].Add(decimal.NewFromInt(g.as))
   }
-  fmt.Println("R", R)
+  dd("R", R)
   T := total{ peru: map[int64]int64{}, }
   OPP := map[int64]map[int64]int64{}
   WT := map[int64]int64{}
@@ -154,8 +156,9 @@ func main() {
   }
   T.mn = decimal.NewFromInt(mn)
   T.mx = decimal.NewFromInt(mx)
-  fmt.Println("WT:", WT)
-  fmt.Println("OPP:", OPP)
+  dd("T", T)
+  dd("WT:", WT)
+  dd("OPP:", OPP)
   var mxWonOpp int64 = 0
   for _, oo := range OPP {
     for _, w := range oo {
@@ -258,5 +261,17 @@ func byFarming(mxWonOpp int64, uw int64, oo map[int64]int64) decimal.Decimal {
 func byEffort(u int64, T total) decimal.Decimal {
   a, b, x := dmn, dmx, decimal.NewFromInt(T.peru[u])
   return a.Add(x.Sub(T.mn).Mul(b.Sub(a)).Div(T.mx.Sub(T.mn)))
+}
+
+func dd(ss ...any) {
+  if debug != "0" {
+    fmt.Println(ss...)
+  }
+}
+
+func ddf(s string, ss ...any) {
+  if debug != "0" {
+    fmt.Printf(s, ss...)
+  }
 }
 
