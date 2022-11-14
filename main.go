@@ -18,15 +18,7 @@ type game struct {
   as int64  // away user score
 }
 
-type relParam struct {
-  u int64
-  r decimal.Decimal
-  R map[int64]decimal.Decimal
-  OPP map[int64]map[int64]int64
-  w map[int64]int64
-  G []game
-}
-
+// total rounds played
 type total struct {
   mn decimal.Decimal
   mx decimal.Decimal
@@ -127,17 +119,17 @@ func main() {
   fmt.Println("R", R)
   T := total{ peru: map[int64]int64{}, }
   OPP := map[int64]map[int64]int64{}
-  W := map[int64]int64{}
+  WT := map[int64]int64{}
   for u, _ := range R {
     OPP[u] = map[int64]int64{}
     for _, g := range G {
       if u == g.hi {
         OPP[u][g.ai] += g.hs
-        W[u] += g.hs
+        WT[u] += g.hs
         T.peru[u] += g.hs + g.as
       } else if u == g.ai {
         OPP[u][g.hi] += g.as
-        W[u] += g.as
+        WT[u] += g.as
         T.peru[u] += g.hs + g.as
       }
     }
@@ -154,16 +146,23 @@ func main() {
   }
   T.mn = decimal.NewFromInt(mn)
   T.mx = decimal.NewFromInt(mx)
-  fmt.Println("W:", W)
+  fmt.Println("WT:", WT)
   fmt.Println("OPP:", OPP)
+  var mxWonOpp int64 = 0
+  for _, oo := range OPP {
+    for _, w := range oo {
+      if w > mxWonOpp {
+        mxWonOpp = w
+      }
+    }
+  }
   for i := 1; i <= steps; i++ {
     rr := sortRankings(R)
     rels := map[int64]decimal.Decimal{}
-    for u, r := range R {
-      p := relParam{u: u, r: r, R: R, OPP: OPP, G: G, w: W}
+    for u, _ := range R {
       relis := []decimal.Decimal{
-        byQuality(OPP[u], W[u], rr, u),
-        byFarming(p),
+        byQuality(OPP[u], WT[u], rr, u),
+        byFarming(mxWonOpp, T.peru[u], OPP[u]),
         byEffort(u, T),
       }
       sm := decimal.Sum(relRel, relis...)
@@ -227,8 +226,26 @@ func byQuality(o map[int64]int64, w int64, rr []sortedRanking, u int64) decimal.
   return decimal.NewFromInt(1)
 }
 
-func byFarming(P relParam) decimal.Decimal {
-  return decimal.NewFromInt(1)
+func byFarming(mxWonOpp int64, uw int64, oo map[int64]int64) decimal.Decimal {
+  P := decimal.Zero
+  if uw == 0 || mxWonOpp == 0 {
+    return decimal.NewFromInt(1)
+  }
+  for _, w := range oo {
+    if w == 0 {
+      continue
+    }
+    sm := decimal.Zero
+    for i := 1; int64(i) <= w; i++ {
+      sm.Add(
+        decimal.NewFromInt(-1).Mul(
+          decimal.NewFromInt(99).Div(decimal.NewFromInt(100).Mul(decimal.NewFromFloat(math.Log(float64(mxWonOpp))))),
+        ).Mul(decimal.NewFromFloat(math.Log(float64(i)))).Add(decimal.NewFromInt(1)),
+      )
+    }
+    P = P.Add(sm.Mul(decimal.NewFromInt(w).Div(decimal.NewFromInt(uw))))
+  }
+  return P
 }
 
 func byEffort(u int64, T total) decimal.Decimal {
