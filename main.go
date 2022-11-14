@@ -11,6 +11,14 @@ import (
   "github.com/shopspring/decimal"
 )
 
+var d99 = decimal.NewFromInt(99)
+var d100 = decimal.NewFromInt(100)
+var dmn = decimal.RequireFromString("0.01")
+var d1 = decimal.NewFromInt(1)
+var dn1 = decimal.NewFromInt(-1)
+var d3 = decimal.NewFromInt(3)
+var dmx = d1
+
 type game struct {
   hi int64  // home user id
   ai int64  // away user id
@@ -193,7 +201,6 @@ func sortRankings(R map[int64]decimal.Decimal) []sortedRanking {
           sr.uu = append(sr.uu, u)
         }
       }
-      fmt.Println("sr r p uu", sr.r, sr.p, sr.uu)
       srr = append(srr, sr)
     }
     return srr
@@ -220,16 +227,16 @@ func byQuality(o map[int64]int64, w int64, rr []sortedRanking, u int64) decimal.
   wt := decimal.NewFromInt(w)
   L := decimal.NewFromInt(int64(len(rr)))
   for _, w := range o {
-    y := decimal.NewFromInt(rru+1).Div(L).Pow(decimal.NewFromInt(3))
+    y := decimal.NewFromInt(rru+1).Div(L).Pow(d3)
     rel = rel.Add(y.Mul(decimal.NewFromInt(w).Div(wt)));
   }
-  return decimal.NewFromInt(1)
+  return d1
 }
 
 func byFarming(mxWonOpp int64, uw int64, oo map[int64]int64) decimal.Decimal {
   P := decimal.Zero
   if uw == 0 || mxWonOpp == 0 {
-    return decimal.NewFromInt(1)
+    return d1
   }
   for _, w := range oo {
     if w == 0 {
@@ -238,9 +245,9 @@ func byFarming(mxWonOpp int64, uw int64, oo map[int64]int64) decimal.Decimal {
     sm := decimal.Zero
     for i := 1; int64(i) <= w; i++ {
       sm.Add(
-        decimal.NewFromInt(-1).Mul(
-          decimal.NewFromInt(99).Div(decimal.NewFromInt(100).Mul(decimal.NewFromFloat(math.Log(float64(mxWonOpp))))),
-        ).Mul(decimal.NewFromFloat(math.Log(float64(i)))).Add(decimal.NewFromInt(1)),
+        dn1.Mul(
+          d99.Div(d100.Mul(decimal.NewFromFloat(math.Log(float64(mxWonOpp))))),
+        ).Mul(decimal.NewFromFloat(math.Log(float64(i)))).Add(d1),
       )
     }
     P = P.Add(sm.Mul(decimal.NewFromInt(w).Div(decimal.NewFromInt(uw))))
@@ -249,9 +256,7 @@ func byFarming(mxWonOpp int64, uw int64, oo map[int64]int64) decimal.Decimal {
 }
 
 func byEffort(u int64, T total) decimal.Decimal {
-  a := decimal.RequireFromString("0.01")
-  b := decimal.RequireFromString("1")
-  x := decimal.NewFromInt(T.peru[u])
+  a, b, x := dmn, dmx, decimal.NewFromInt(T.peru[u])
   return a.Add(x.Sub(T.mn).Mul(b.Sub(a)).Div(T.mx.Sub(T.mn)))
 }
 
