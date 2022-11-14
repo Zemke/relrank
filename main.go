@@ -161,11 +161,11 @@ func main() {
     }
   }
   for i := 1; i <= steps; i++ {
-    rn := sortRankings(R)
+    up, L := distinctPositionsAsc(R)
     rels := map[int64]decimal.Decimal{}
     for u, _ := range R {
       relis := []decimal.Decimal{
-        byQuality(OPP[u], WT[u], rn[u], int64(len(rn)), u),
+        byQuality(OPP[u], WT[u], up, L),
         byFarming(mxWonOpp, T.peru[u], OPP[u]),
         byEffort(u, T),
       }
@@ -181,7 +181,7 @@ func main() {
   }
 }
 
-func sortRankings(R map[int64]decimal.Decimal) map[int64]int64 {
+func distinctPositionsAsc(R map[int64]decimal.Decimal) (map[int64]int64, decimal.Decimal) {
   rankings := []decimal.Decimal{}
   for _, r := range R {
     rankings = append(rankings, r)
@@ -211,7 +211,6 @@ func sortRankings(R map[int64]decimal.Decimal) map[int64]int64 {
       for _, u1 := range r.uu {
         if u1 == u {
           srr[u] = r.p
-          //rru = r.p
           break
         }
       }
@@ -224,15 +223,15 @@ func sortRankings(R map[int64]decimal.Decimal) map[int64]int64 {
       os.Exit(1)
     }
   }
-  return srr
+  fmt.Println(srr)
+  return srr, decimal.NewFromInt(int64(len(rn)))
 }
 
-func byQuality(o map[int64]int64, w int64, rn int64, rrlen int64, u int64) decimal.Decimal {
+func byQuality(o map[int64]int64, w int64, up map[int64]int64, L decimal.Decimal) decimal.Decimal {
   rel := decimal.Zero
   wt := decimal.NewFromInt(w)
-  L := decimal.NewFromInt(rrlen)
-  for _, w := range o {
-    y := decimal.NewFromInt(rn+1).Div(L).Pow(d3)
+  for u, w := range o {
+    y := decimal.NewFromInt(up[u]+1).Div(L).Pow(d3)
     rel = rel.Add(y.Mul(decimal.NewFromInt(w).Div(wt)));
   }
   return rel
