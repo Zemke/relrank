@@ -31,8 +31,10 @@ func TestByEffort(t *testing.T) {
   if rett[len(rett)-1].Cmp(dmx) != 0 {
     t.Error(rett[len(rett)-1], "should be", dmx)
   }
-  if rett[1].Cmp(decimal.RequireFromString(".505")) != 0 {
-    t.Error(rett[1], "should be", dmx)
+  two := decimal.NewFromInt(2)
+  mid := rett[len(rett)-1].Div(two).Add(dmn.Div(two))
+  if rett[1].Cmp(mid) != 0 {
+    t.Error(rett[1], "should be", mid)
   }
 }
 
