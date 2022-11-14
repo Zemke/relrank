@@ -66,5 +66,8 @@ func TestByQuality(t *testing.T) {
       t.Error("expecting", act, "to be", exp[u])
     }
   }
+  if rett[3].Cmp(dmx) != 0 {
+    t.Error("expecting", rett[3], "to be", dmx)
+  }
 }
 
