@@ -235,7 +235,7 @@ func byQuality(o map[int64]int64, w int64, rn int64, rrlen int64, u int64) decim
     y := decimal.NewFromInt(rn+1).Div(L).Pow(d3)
     rel = rel.Add(y.Mul(decimal.NewFromInt(w).Div(wt)));
   }
-  return d1
+  return rel
 }
 
 func byFarming(mxWonOpp int64, uw int64, oo map[int64]int64) decimal.Decimal {
