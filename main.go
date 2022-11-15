@@ -248,15 +248,14 @@ func byFarming(mxWonOpp int64, uw int64, oo map[int64]int64) decimal.Decimal {
     }
     sm := decimal.Zero
     for i := 1; int64(i) <= w; i++ {
-      sm = sm.Add(
-        dn1.Mul(
+      sub := dn1.Mul(
           d99.Div(d100.Mul(decimal.NewFromFloat(math.Log(float64(mxWonOpp))))),
-        ).Mul(decimal.NewFromFloat(math.Log(float64(i)))).Add(d1),
-      )
+        ).Mul(decimal.NewFromFloat(math.Log(float64(i)))).Add(d1)
+      sm = sm.Add(sub)
     }
-    P = P.Add(sm.Mul(decimal.NewFromInt(w).Div(decimal.NewFromInt(uw))))
+    P = P.Add(sm)
   }
-  return P
+  return P.Div(decimal.NewFromInt(uw))
 }
 
 func byEffort(u int64, T total) decimal.Decimal {

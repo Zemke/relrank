@@ -71,3 +71,25 @@ func TestByQuality(t *testing.T) {
   }
 }
 
+func TestByFarming(t *testing.T) {
+  tests := []struct{
+    u int64
+    w int64
+    oo map[int64]int64
+  }{
+    { u: 1, w: 3, oo: map[int64]int64{ 1: 2, 3: 1 } },
+    { u: 2, w: 7, oo: map[int64]int64{ 1: 4, 3: 3 } },
+  }
+  var mxWonOpp int64 = 4
+  rett := map[int64]decimal.Decimal{}
+  for _, test := range tests {
+    rett[test.u] = byFarming(mxWonOpp, test.w, test.oo)
+  }
+  exp := map[int64]string{ 1: "0.835", 2: "0.4929838748980079" }
+  for u, ex := range exp {
+    if rett[u].Cmp(decimal.RequireFromString(ex)) != 0 {
+      t.Error("Expecting", rett[u], "to be", ex)
+    }
+  }
+}
+
