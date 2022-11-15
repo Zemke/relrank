@@ -126,3 +126,25 @@ func TestDistinctPositionsAsc(t *testing.T) {
     }
   }
 }
+
+func TestCalcSteps(t *testing.T) {
+  tests := []struct{
+    a int
+    exp int
+  }{
+    {   50, 12 },
+    {  150, 20 },
+    {   77, 15 },
+    { 1000, 21 },
+  }
+  for _, test := range tests {
+    G := []game{}
+    for i := 1; i <= test.a; i++ {
+      G = append(G, game{ 1, 1 + int64(i) ,1 ,0 })
+    }
+    if ret := calcSteps(G); ret != test.exp {
+      t.Error("Expecting", ret, "to be", test.exp)
+    }
+  }
+}
+
