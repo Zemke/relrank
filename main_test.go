@@ -148,3 +148,25 @@ func TestCalcSteps(t *testing.T) {
   }
 }
 
+func TestPrepare(t *testing.T) {
+  inp := []string {
+    "1,2,3,0",
+    "1,2,1,0",
+    "3,1,1,3",
+    "5,1,2,3",
+  }
+  ret := prepare(inp)
+
+  expG := []game {
+    game{ hi: 1, ai: 2, hs: 3, as: 0 },
+    game{ hi: 1, ai: 2, hs: 1, as: 0 },
+    game{ hi: 3, ai: 1, hs: 1, as: 3 },
+    game{ hi: 5, ai: 1, hs: 2, as: 3 },
+  }
+  for i, g := range ret.G {
+    if g != expG[i] {
+      t.Error("Expected", g, "to be", expG[i])
+    }
+  }
+}
+
