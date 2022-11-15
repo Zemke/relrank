@@ -176,6 +176,7 @@ func main() {
       R[u] = R[u].Mul(rel)
     }
   }
+  dd("output")
   for u, r := range R {
     fmt.Printf("%d,%s\n", u, r)
   }
