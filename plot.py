@@ -57,7 +57,7 @@ plt.plot(xx, yy, label=f'a={a}')
 plt.legend()
 plt.ylabel('relativizer')
 plt.xlabel('number of round against same opponent')
-plt.title('$y=-(99/(100ln(a)))ln(x)+1$')
+plt.title('$y = -{99 \over {100 ln(a)}}ln(x)+1$')
 disp('images/farming.png')
 
 plt.figure()
