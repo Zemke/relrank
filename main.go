@@ -223,7 +223,6 @@ func distinctPositionsAsc(R map[int64]decimal.Decimal) (map[int64]int64, decimal
       os.Exit(1)
     }
   }
-  fmt.Println(srr)
   return srr, decimal.NewFromInt(int64(len(rn)))
 }
 
