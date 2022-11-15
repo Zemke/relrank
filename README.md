@@ -173,20 +173,15 @@ with everything in between decreasing towars $0.01$ logarithmically.
 
 ![Farming relativizer](images/farming.png)
 
-This formula is applied to each round so that $x$ is a set where each number
-represents the $n$-th won round.
+This formula is applied to each round per opponent so that $x$ is a set where
+each number represents the $n$-th won round.
 
 $$ X = \lbrace 1, 2, 3, 4, ... \rbrace $$
 
-This is added and divided by the total number of rounds against that opponent.
-This is the average.
-
-$$ {-{99 \over {100 ln(a)}}ln(x)+1} \over z $$
-
-This is the per opponent and yet again averaged across all opponents.
+This is then averaged across the total number of won rounds.
 The final formula to output the factor of relativization:
 
-$$ \sum_{i=1}^{o}{{\sum_{x=1}^{z}{-{99 \over {100 ln(a)}}ln(x)+1} \over z} * w_i/t} $$
+$$ {\sum_{x=1}{-{99 \over {100 ln(a)}}ln(x)+1}} \over z $$
 
 #### `effort`
 

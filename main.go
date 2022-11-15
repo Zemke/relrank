@@ -246,14 +246,12 @@ func byFarming(mxWonOpp int64, uw int64, oo map[int64]int64) decimal.Decimal {
     if w == 0 {
       continue
     }
-    sm := decimal.Zero
     for i := 1; int64(i) <= w; i++ {
       sub := dn1.Mul(
           d99.Div(d100.Mul(decimal.NewFromFloat(math.Log(float64(mxWonOpp))))),
         ).Mul(decimal.NewFromFloat(math.Log(float64(i)))).Add(d1)
-      sm = sm.Add(sub)
+      P = P.Add(sub)
     }
-    P = P.Add(sm)
   }
   return P.Div(decimal.NewFromInt(uw))
 }
