@@ -34,6 +34,15 @@ type total struct {
   peru map[int64]int64
 }
 
+type prep struct {
+  G []game
+  R map[int64]decimal.Decimal
+  T total
+  OPP map[int64]map[int64]int64
+  WT map[int64]int64
+  mxWonOpp int64
+}
+
 func getenv(env string, def string) string {
   if v, ok := os.LookupEnv(env); ok {
     return v
@@ -61,6 +70,75 @@ func calcSteps(G []game) int {
   }
   steps := -1 + math.Log10(float64(mx) * float64(.13)) * relSteps
   return int(math.Max(math.Min(math.Round(steps), 21), 1))
+}
+
+func prepare(inp []string) prep {
+  var G []game
+  for _, l := range inp {
+    sp := strings.Split(l, ",")
+    var vv, err = [...]interface{}{sp[0], sp[1], sp[2], sp[3]}, error(nil)
+    gvv := [4]int64{}
+    for i, v := range vv  {
+      if gvv[i], err = strconv.ParseInt(v.(string), 10, 64); err != nil {
+        fmt.Printf("%s is not an integer", vv[i])
+        os.Exit(1)
+      }
+    }
+    G = append(G, game{gvv[0], gvv[1], gvv[2], gvv[3]})
+  }
+
+  R := map[int64]decimal.Decimal{}
+  for _, g := range G {
+    R[g.hi] = R[g.hi].Add(decimal.NewFromInt(g.hs))
+    R[g.ai] = R[g.ai].Add(decimal.NewFromInt(g.as))
+  }
+
+  T := total{ peru: map[int64]int64{}, }
+  OPP := map[int64]map[int64]int64{}
+  WT := map[int64]int64{}
+  for u, _ := range R {
+    OPP[u] = map[int64]int64{}
+    for _, g := range G {
+      if u == g.hi {
+        OPP[u][g.ai] += g.hs
+        WT[u] += g.hs
+        T.peru[u] += g.hs + g.as
+      } else if u == g.ai {
+        OPP[u][g.hi] += g.as
+        WT[u] += g.as
+        T.peru[u] += g.hs + g.as
+      }
+    }
+  }
+  var mn int64 = 0
+  var mx int64 = 0
+  for _, w := range T.peru {
+    if mn > w {
+      mn = w
+    }
+    if mx < w {
+      mx = w
+    }
+  }
+  T.mn = decimal.NewFromInt(mn)
+  T.mx = decimal.NewFromInt(mx)
+
+  var mxWonOpp int64 = 0
+  for _, oo := range OPP {
+    for _, w := range oo {
+      if w > mxWonOpp {
+        mxWonOpp = w
+      }
+    }
+  }
+  return prep{
+    G: G,
+    R: R,
+    T: T,
+    OPP: OPP,
+    WT: WT,
+    mxWonOpp: mxWonOpp,
+  }
 }
 
 func main() {
@@ -91,93 +169,39 @@ func main() {
       os.Exit(1)
     }
   }
-  var G []game
-  for _, l := range inp {
-    sp := strings.Split(l, ",")
-    var vv, err = [...]interface{}{sp[0], sp[1], sp[2], sp[3]}, error(nil)
-    gvv := [4]int64{}
-    for i, v := range vv  {
-      if gvv[i], err = strconv.ParseInt(v.(string), 10, 64); err != nil {
-        fmt.Printf("%s is not an integer", vv[i])
-        os.Exit(1)
-      }
-    }
-    G = append(G, game{gvv[0], gvv[1], gvv[2], gvv[3]})
-  }
-  for i, g := range G {
+  prep := prepare(inp)
+  for i, g := range prep.G {
     dd(i, g)
   }
+  dd("R", prep.R)
+  dd("T", prep.T)
+  dd("WT:", prep.WT)
+  dd("OPP:", prep.OPP)
   relRel, err := decimal.NewFromString(getenv("RELRANK_RELREL", "20"));
   if err != nil {
     fmt.Println("RELRANK_RELREL is not a number")
   }
   dd("relRel:", relRel)
-  R := map[int64]decimal.Decimal{}
-  for _, g := range G {
-    R[g.hi] = R[g.hi].Add(decimal.NewFromInt(g.hs))
-    R[g.ai] = R[g.ai].Add(decimal.NewFromInt(g.as))
-  }
-  dd("R", R)
-  T := total{ peru: map[int64]int64{}, }
-  OPP := map[int64]map[int64]int64{}
-  WT := map[int64]int64{}
-  for u, _ := range R {
-    OPP[u] = map[int64]int64{}
-    for _, g := range G {
-      if u == g.hi {
-        OPP[u][g.ai] += g.hs
-        WT[u] += g.hs
-        T.peru[u] += g.hs + g.as
-      } else if u == g.ai {
-        OPP[u][g.hi] += g.as
-        WT[u] += g.as
-        T.peru[u] += g.hs + g.as
-      }
-    }
-  }
-  var mn int64 = 0
-  var mx int64 = 0
-  for _, w := range T.peru {
-    if mn > w {
-      mn = w
-    }
-    if mx < w {
-      mx = w
-    }
-  }
-  T.mn = decimal.NewFromInt(mn)
-  T.mx = decimal.NewFromInt(mx)
-  dd("T", T)
-  dd("WT:", WT)
-  dd("OPP:", OPP)
-  var mxWonOpp int64 = 0
-  for _, oo := range OPP {
-    for _, w := range oo {
-      if w > mxWonOpp {
-        mxWonOpp = w
-      }
-    }
-  }
-  steps := calcSteps(G)
+  steps := calcSteps(prep.G)
   dd("steps:", steps)
   for i := 1; i <= steps; i++ {
-    up, L := distinctPositionsAsc(R)
+    up, L := distinctPositionsAsc(prep.R)
     rels := map[int64]decimal.Decimal{}
-    for u, _ := range R {
+    for u, _ := range prep.R {
       relis := []decimal.Decimal{
-        byQuality(OPP[u], WT[u], up, L),
-        byFarming(mxWonOpp, T.peru[u], OPP[u]),
-        byEffort(u, T),
+        byQuality(prep.OPP[u], prep.WT[u], up, L),
+        byFarming(prep.mxWonOpp, prep.T.peru[u], prep.OPP[u]),
+        byEffort(u, prep.T),
       }
       sm := decimal.Sum(relRel, relis...)
       rels[u] = sm.Div(decimal.NewFromInt(int64(len(relis)+1)))
     }
     for u, rel := range rels {
-      R[u] = R[u].Mul(rel)
+      prep.R[u] = prep.R[u].Mul(rel)
     }
   }
   dd("output")
-  for u, r := range R {
+  for u, r := range prep.R {
     fmt.Printf("%d,%s\n", u, r)
   }
 }
