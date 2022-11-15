@@ -183,48 +183,45 @@ func main() {
 }
 
 func distinctPositionsAsc(R map[int64]decimal.Decimal) (map[int64]int64, decimal.Decimal) {
-  rankings := []decimal.Decimal{}
+  rr := []decimal.Decimal{}
   for _, r := range R {
-    rankings = append(rankings, r)
+    rr = append(rr, r)
   }
-  sort.Slice(rankings, func (i, j int) bool {
-    return rankings[i].Cmp(rankings[j]) < 0
+  sort.Slice(rr, func (i, j int) bool {
+    return rr[i].Cmp(rr[j]) < 0
   })
-  type sortedRanking struct {
-    uu []int64
-    r decimal.Decimal
-    p int64
-  }
-  rn := []sortedRanking{}
-  for i, r := range rankings {
-    sr := sortedRanking{ r: r, p: int64(i), uu: []int64{} }
+  var uniq int64 = 0
+  var p int64 = 0
+  upAsc := map[int64]int64{}
+  done := map[int64]bool{}
+  for i, r := range rr {
+    var user int64
     for u, r1 := range R {
-      if r == r1 {
-        sr.uu = append(sr.uu, u)
-      }
-    }
-    rn = append(rn, sr)
-  }
-  srr := map[int64]int64{}
-  for u, _ := range R {
-    srr[u] = -1
-    for _, r := range rn {
-      for _, u1 := range r.uu {
-        if u1 == u {
-          srr[u] = r.p
-          break
-        }
-      }
-      if srr[u] != -1 {
+      if r1.Cmp(r) == 0 && !done[u] {
+        user = u
         break
       }
     }
-    if srr[u] == -1 {
-      fmt.Println("user p not found")
+    if user == 0 {
+      fmt.Printf("user with rating %s not found", r)
       os.Exit(1)
     }
+    done[user] = true
+    if i == 0 {
+      upAsc[user] = p
+      p += 1
+      uniq += 1
+    } else {
+      if rr[i-1].Cmp(rr[i]) == 0 {
+        upAsc[user] = p-1
+      } else {
+        upAsc[user] = p
+        p += 1
+        uniq += 1
+      }
+    }
   }
-  return srr, decimal.NewFromInt(int64(len(rn)))
+  return upAsc, decimal.NewFromInt(uniq)
 }
 
 func byQuality(o map[int64]int64, w int64, up map[int64]int64, L decimal.Decimal) decimal.Decimal {

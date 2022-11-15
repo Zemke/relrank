@@ -93,3 +93,36 @@ func TestByFarming(t *testing.T) {
   }
 }
 
+func TestDistinctPositionsAsc(t *testing.T) {
+  R := map[int64]decimal.Decimal{
+    1: decimal.RequireFromString("1"),
+    2: decimal.RequireFromString("2"),
+    3: decimal.RequireFromString("3"),
+    4: decimal.RequireFromString("3"),
+    5: decimal.RequireFromString("10"),
+    6: decimal.RequireFromString("10"),
+    7: decimal.RequireFromString("9"),
+    8: decimal.RequireFromString("8"),
+    9: decimal.RequireFromString("11"),
+  }
+  act, actL := distinctPositionsAsc(R)
+  if actL.IntPart() != 7 {
+    t.Error("Expecting", actL, "to be", 7)
+  }
+  exp := map[int64]int64{
+    1: 0,
+    2: 1,
+    3: 2,
+    4: 2,
+    5: 5,
+    6: 5,
+    7: 4,
+    8: 3,
+    9: 6,
+  }
+  for u, ex := range exp {
+    if act[u] != ex {
+      t.Error("Expecting", act[u], "to be", ex)
+    }
+  }
+}
