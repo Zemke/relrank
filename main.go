@@ -107,8 +107,6 @@ func main() {
   for i, g := range G {
     dd(i, g)
   }
-  steps := calcSteps(G)
-  dd("steps:", steps)
   relRel, err := decimal.NewFromString(getenv("RELRANK_RELREL", "20"));
   if err != nil {
     fmt.Println("RELRANK_RELREL is not a number")
@@ -160,6 +158,8 @@ func main() {
       }
     }
   }
+  steps := calcSteps(G)
+  dd("steps:", steps)
   for i := 1; i <= steps; i++ {
     up, L := distinctPositionsAsc(R)
     rels := map[int64]decimal.Decimal{}
