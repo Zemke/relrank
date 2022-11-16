@@ -190,7 +190,7 @@ func main() {
     for u, _ := range prep.R {
       relis := []decimal.Decimal{
         byQuality(prep.OPP[u], prep.WT[u], up, L),
-        byFarming(prep.mxWonOpp, prep.T.peru[u], prep.OPP[u]),
+        byFarming(prep.mxWonOpp, prep.WT[u], prep.OPP[u]),
         byEffort(u, prep.T),
       }
       sm := decimal.Sum(relRel, relis...)
