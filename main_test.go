@@ -191,5 +191,13 @@ func TestPrepare(t *testing.T) {
       t.Error("Expected", v, "for user", u, "to be", expTperu[u])
     }
   }
+
+  // WT
+  expWT := map[int64]int64{ 1: 10, 2: 0, 3: 1, 5: 2 }
+  for u, v := range ret.WT {
+    if v != expWT[u] {
+      t.Error("Expected", v, "for user", u, "to be", expWT[u])
+    }
+  }
 }
 
