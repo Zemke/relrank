@@ -183,6 +183,16 @@ func main() {
   steps := calcSteps(prep.G)
   dd("steps:", steps)
   R := apply(prep, steps, relRel, prep.R)
+  scaleMx, err := decimal.NewFromString(getenv("RELRANK_SCALE_MAX", "0"));
+  if err != nil {
+    log.Fatalln("RELRANK_SCALE_MAX is not a number")
+  }
+  if scaleMx.Cmp(decimal.Zero) != 0 {
+    if scaleMx.Cmp(decimal.Zero) < 0 {
+      log.Fatalln("RELRANK_SCALE_MAX must be positive")
+    }
+    R = scale(R, scaleMx)
+  }
   for u, r := range R {
     fmt.Printf("%d,%s\n", u, r)
   }
@@ -298,5 +308,19 @@ func ddf(s string, ss ...any) {
   if debug != "0" {
     log.Printf(s, ss...)
   }
+}
+
+func scale(R map[int64]decimal.Decimal, scaleMx decimal.Decimal) map[int64]decimal.Decimal {
+  mx := decimal.Zero
+  for _, r := range R {
+    if r.Cmp(mx) > 0 {
+      mx = r
+    }
+  }
+  R2 := map[int64]decimal.Decimal{}
+  for u, r := range R {
+    R2[u] = decimal.Zero.Add(r.Sub(decimal.Zero).Mul(scaleMx.Sub(decimal.Zero)).Div(mx.Sub(decimal.Zero)))
+  }
+  return R2
 }
 
