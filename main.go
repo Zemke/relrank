@@ -193,6 +193,13 @@ func main() {
     }
     R = scale(R, scaleMx)
   }
+  if v, ok := os.LookupEnv("RELRANK_ROUND"); ok {
+    rnd, err := strconv.Atoi(v)
+    if err != nil {
+      log.Fatalln("RELRANK_ROUND must be an integer")
+    }
+    R = round(R, int32(rnd))
+  }
   for u, r := range R {
     fmt.Printf("%d,%s\n", u, r)
   }
@@ -322,6 +329,15 @@ func scale(R map[int64]decimal.Decimal,
   R2 := map[int64]decimal.Decimal{}
   for u, r := range R {
     R2[u] = z.Add(r.Sub(z).Mul(scaleMx.Sub(z)).Div(mx.Sub(z)))
+  }
+  return R2
+}
+
+func round(R map[int64]decimal.Decimal,
+           rnd int32) map[int64]decimal.Decimal {
+  R2 := map[int64]decimal.Decimal{}
+  for u, r := range R {
+    R2[u] = r.Round(rnd)
   }
   return R2
 }
