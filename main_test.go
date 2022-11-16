@@ -224,3 +224,19 @@ func TestPrepare(t *testing.T) {
   }
 }
 
+func TestScale(t *testing.T) {
+  R := map[int64]decimal.Decimal{
+    1: decimal.NewFromInt(100),
+    2: decimal.NewFromInt(53),
+    3: decimal.NewFromInt(11),
+  }
+
+  ret := scale(R, decimal.NewFromInt(10))
+  exp := map[int64]string{ 1: "10", 2: "5.3", 3: "1.1" }
+  for u, ex := range exp {
+    if decimal.RequireFromString(ex).Cmp(ret[u]) != 0 {
+      t.Error("Excpected", ret[u], "to equal", ex)
+    }
+  }
+}
+
