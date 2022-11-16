@@ -184,26 +184,36 @@ func main() {
   dd("relRel:", relRel)
   steps := calcSteps(prep.G)
   dd("steps:", steps)
-  for i := 1; i <= steps; i++ {
-    up, L := distinctPositionsAsc(prep.R)
-    rels := map[int64]decimal.Decimal{}
-    for u, _ := range prep.R {
-      relis := []decimal.Decimal{
-        byQuality(prep.OPP[u], prep.WT[u], up, L),
-        byFarming(prep.mxWonOpp, prep.WT[u], prep.OPP[u]),
-        byEffort(u, prep.T),
-      }
-      sm := decimal.Sum(relRel, relis...)
-      rels[u] = sm.Div(decimal.NewFromInt(int64(len(relis)+1)))
-    }
-    for u, rel := range rels {
-      prep.R[u] = prep.R[u].Mul(rel)
-    }
-  }
+  R := apply(prep, steps, relRel, prep.R)
   dd("output")
-  for u, r := range prep.R {
+  for u, r := range R {
     fmt.Printf("%d,%s\n", u, r)
   }
+}
+
+func apply(prep prep,
+           steps int,
+           relRel decimal.Decimal,
+           R map[int64]decimal.Decimal) map[int64]decimal.Decimal {
+  up, L := distinctPositionsAsc(R)
+  rels := map[int64]decimal.Decimal{}
+  for u, _ := range prep.R {
+    relis := []decimal.Decimal{
+      byQuality(prep.OPP[u], prep.WT[u], up, L),
+      byFarming(prep.mxWonOpp, prep.WT[u], prep.OPP[u]),
+      byEffort(u, prep.T),
+    }
+    sm := decimal.Sum(relRel, relis...)
+    rels[u] = sm.Div(decimal.NewFromInt(int64(len(relis)+1)))
+  }
+  R2 := map[int64]decimal.Decimal{}
+  for u, rel := range rels {
+    R2[u] = R[u].Mul(rel)
+  }
+  if steps > 1 {
+    R2 = apply(prep, steps-1, relRel, R2)
+  }
+  return R2
 }
 
 func distinctPositionsAsc(R map[int64]decimal.Decimal) (map[int64]int64, decimal.Decimal) {
