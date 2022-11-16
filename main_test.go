@@ -199,5 +199,9 @@ func TestPrepare(t *testing.T) {
       t.Error("Expected", v, "for user", u, "to be", expWT[u])
     }
   }
+  // mxWonOpp
+  if ret.mxWonOpp != 4 {
+    t.Error("Expected", ret.mxWonOpp, "to be", 4)
+  }
 }
 
