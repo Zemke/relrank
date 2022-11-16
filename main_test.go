@@ -164,17 +164,17 @@ func TestPrepare(t *testing.T) {
     game{ hi: 3, ai: 1, hs: 1, as: 3 },
     game{ hi: 5, ai: 1, hs: 2, as: 3 },
   }
-  for i, g := range ret.G {
-    if g != expG[i] {
-      t.Error("Expected", g, "to be", expG[i])
+  for i, g := range expG {
+    if g != ret.G[i] {
+      t.Error("Expected", ret.G[i], "to be", g)
     }
   }
 
   // R
   expR := map[int64]string{ 1: "10", 2: "0", 3: "1", 5: "2" }
-  for u, r := range ret.R {
-    if r.Cmp(decimal.RequireFromString(expR[u])) != 0 {
-      t.Error("Expected", r, "for user", u, "to be", expR[u])
+  for u, r := range expR {
+    if decimal.RequireFromString(r).Cmp(ret.R[u]) != 0 {
+      t.Error("Expected", ret.R[u], "for user", u, "to be", r)
     }
   }
 
@@ -186,17 +186,17 @@ func TestPrepare(t *testing.T) {
     t.Error("Expected", ret.T.mx, "to be", 13)
   }
   expTperu := map[int64]int64{ 1: 13, 2: 4, 3: 4, 5: 5 }
-  for u, v := range ret.T.peru {
-    if v != expTperu[u] {
-      t.Error("Expected", v, "for user", u, "to be", expTperu[u])
+  for u, v := range expTperu {
+    if v != ret.T.peru[u] {
+      t.Error("Expected", ret.T.peru[u], "for user", u, "to be", v)
     }
   }
 
   // WT
   expWT := map[int64]int64{ 1: 10, 2: 0, 3: 1, 5: 2 }
-  for u, v := range ret.WT {
-    if v != expWT[u] {
-      t.Error("Expected", v, "for user", u, "to be", expWT[u])
+  for u, v := range expWT {
+    if v != ret.WT[u] {
+      t.Error("Expected", ret.WT[u], "for user", u, "to be", v)
     }
   }
 
@@ -207,13 +207,13 @@ func TestPrepare(t *testing.T) {
     3: map[int64]int64{ 1: 1, 2: 0, 5: 0 },
     5: map[int64]int64{ 1: 2, 2: 0, 3: 0 },
   }
-  for u, oo := range ret.OPP {
-    if len(oo) > 4 {
-      t.Error("There should only be 4 opponents, is", len(oo))
+  for u, oo := range expOPP {
+    if len(ret.OPP[u]) > 4 {
+      t.Error("There should only be 4 opponents, is", len(ret.OPP[u]))
     }
     for o, w := range oo {
-      if w != expOPP[u][o] {
-        t.Error("Expected", w, "for user", u, "against", o, "to be", expOPP[u])
+      if w != ret.OPP[u][o] {
+        t.Error("Expected", ret.OPP[u][o], "for user", u, "against", o, "to be", w)
       }
     }
   }
