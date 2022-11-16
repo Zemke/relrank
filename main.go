@@ -305,18 +305,6 @@ func byEffort(u int64, T total) decimal.Decimal {
   return a.Add(x.Sub(T.mn).Mul(b.Sub(a)).Div(T.mx.Sub(T.mn)))
 }
 
-func dd(ss ...any) {
-  if debug != "0" {
-    log.Println(ss...)
-  }
-}
-
-func ddf(s string, ss ...any) {
-  if debug != "0" {
-    log.Printf(s, ss...)
-  }
-}
-
 func scale(R map[int64]decimal.Decimal,
            scaleMx decimal.Decimal) map[int64]decimal.Decimal {
   mx := decimal.Zero
@@ -340,5 +328,17 @@ func round(R map[int64]decimal.Decimal,
     R2[u] = r.Round(rnd)
   }
   return R2
+}
+
+func dd(ss ...any) {
+  if debug != "0" {
+    log.Println(ss...)
+  }
+}
+
+func ddf(s string, ss ...any) {
+  if debug != "0" {
+    log.Printf(s, ss...)
+  }
 }
 
