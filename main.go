@@ -310,16 +310,18 @@ func ddf(s string, ss ...any) {
   }
 }
 
-func scale(R map[int64]decimal.Decimal, scaleMx decimal.Decimal) map[int64]decimal.Decimal {
+func scale(R map[int64]decimal.Decimal,
+           scaleMx decimal.Decimal) map[int64]decimal.Decimal {
   mx := decimal.Zero
   for _, r := range R {
     if r.Cmp(mx) > 0 {
       mx = r
     }
   }
+  z := decimal.Zero
   R2 := map[int64]decimal.Decimal{}
   for u, r := range R {
-    R2[u] = decimal.Zero.Add(r.Sub(decimal.Zero).Mul(scaleMx.Sub(decimal.Zero)).Div(mx.Sub(decimal.Zero)))
+    R2[u] = z.Add(r.Sub(z).Mul(scaleMx.Sub(z)).Div(mx.Sub(z)))
   }
   return R2
 }
