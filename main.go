@@ -2,6 +2,7 @@ package main
 
 import (
   "fmt"
+  "log"
   "strings"
   "bufio"
   "os"
@@ -54,8 +55,7 @@ func calcSteps(G []game) int {
   var relSteps, err = strconv.ParseFloat(getenv("RELRANK_RELTEPS", "15.9"), 64)
   dd("relSteps:", relSteps)
   if err != nil {
-    fmt.Printf("%f is invalid for RELRANK_RELSTEPS\n", relSteps)
-    os.Exit(1)
+    log.Fatalf("%f is invalid for RELRANK_RELSTEPS\n", relSteps)
   }
   t := map[int64]int64{}
   for _, g := range G {
@@ -80,8 +80,7 @@ func prepare(inp []string) prep {
     gvv := [4]int64{}
     for i, v := range vv  {
       if gvv[i], err = strconv.ParseInt(v.(string), 10, 64); err != nil {
-        fmt.Printf("%s is not an integer", vv[i])
-        os.Exit(1)
+        log.Fatalf("%s is not an integer", vv[i])
       }
     }
     G = append(G, game{gvv[0], gvv[1], gvv[2], gvv[3]})
@@ -142,10 +141,10 @@ func prepare(inp []string) prep {
 }
 
 func main() {
+  log.SetFlags(0)
   prec, err := strconv.Atoi(getenv("RELRANK_PREC", "50"))
   if err != nil {
-    fmt.Println("Precision from RELRANK_PREC is invalid - should be int")
-    os.Exit(1)
+    log.Fatalln("Precision from RELRANK_PREC is invalid - should be int")
   }
   decimal.DivisionPrecision = prec
   dd("precision:", decimal.DivisionPrecision)
@@ -165,8 +164,7 @@ func main() {
   } else {
     if len(os.Args) > 1 {
       file := os.Args[1]
-      fmt.Printf("File is %s but it's not yet supported\n", file)
-      os.Exit(1)
+      log.Fatalf("File is %s but it's not yet supported\n", file)
     }
   }
   prep := prepare(inp)
@@ -179,13 +177,12 @@ func main() {
   dd("OPP:", prep.OPP)
   relRel, err := decimal.NewFromString(getenv("RELRANK_RELREL", "20"));
   if err != nil {
-    fmt.Println("RELRANK_RELREL is not a number")
+    log.Fatalln("RELRANK_RELREL is not a number")
   }
   dd("relRel:", relRel)
   steps := calcSteps(prep.G)
   dd("steps:", steps)
   R := apply(prep, steps, relRel, prep.R)
-  dd("output")
   for u, r := range R {
     fmt.Printf("%d,%s\n", u, r)
   }
@@ -237,8 +234,7 @@ func distinctPositionsAsc(R map[int64]decimal.Decimal) (map[int64]int64, decimal
       }
     }
     if user == 0 {
-      fmt.Printf("user with rating %s not found", r)
-      os.Exit(1)
+      log.Fatalf("user with rating %s not found", r)
     }
     done[user] = true
     if i == 0 {
@@ -294,13 +290,13 @@ func byEffort(u int64, T total) decimal.Decimal {
 
 func dd(ss ...any) {
   if debug != "0" {
-    fmt.Println(ss...)
+    log.Println(ss...)
   }
 }
 
 func ddf(s string, ss ...any) {
   if debug != "0" {
-    fmt.Printf(s, ss...)
+    log.Printf(s, ss...)
   }
 }
 

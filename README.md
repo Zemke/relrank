@@ -14,7 +14,7 @@ the ranking.
 
 ## Usage
 
-The input is supplied to STDIN in a comma-separated format:
+The input is supplied to stdin in a comma-separated format:
 
 `user_a_id,user_b_id,user_a_rounds,user_b_rounds`
 
@@ -32,7 +32,7 @@ $ printf "1,2,3,0\n2,1,3,2\n3,1,2,1\nEOF" | DEBUG=0 RELRANK_RELREL=1 RELRANK_PRE
 
 It returns the user ID and its calculated rating.
 
-If `DEBUG=1` this output is preceded with a line that just says `output`.
+If `DEBUG=1` it logs debug information to stderr.
 
 ## Problem
 
