@@ -148,6 +148,7 @@ func main() {
   }
   decimal.DivisionPrecision = prec
   dd("precision:", decimal.DivisionPrecision)
+
   stat, _ := os.Stdin.Stat()
   var inp []string
   if (stat.Mode() & os.ModeCharDevice) == 0 {
@@ -167,6 +168,7 @@ func main() {
       log.Fatalf("File is %s but it's not yet supported\n", file)
     }
   }
+
   prep := prepare(inp)
   for i, g := range prep.G {
     dd(i, g)
@@ -175,6 +177,7 @@ func main() {
   dd("T", prep.T)
   dd("WT:", prep.WT)
   dd("OPP:", prep.OPP)
+
   relRel, err := decimal.NewFromString(getenv("RELRANK_RELREL", "20"));
   if err != nil {
     log.Fatalln("RELRANK_RELREL is not a number")
@@ -182,7 +185,9 @@ func main() {
   dd("relRel:", relRel)
   steps := calcSteps(prep.G)
   dd("steps:", steps)
+
   R := apply(prep, steps, relRel, prep.R)
+
   if v, ok := os.LookupEnv("RELRANK_SCALE_MAX"); ok {
     scaleMx, err := decimal.NewFromString(v)
     if err != nil {
@@ -193,6 +198,7 @@ func main() {
     }
     R = scale(R, scaleMx)
   }
+
   if v, ok := os.LookupEnv("RELRANK_ROUND"); ok {
     rnd, err := strconv.Atoi(v)
     if err != nil {
@@ -200,6 +206,7 @@ func main() {
     }
     R = round(R, int32(rnd))
   }
+
   for u, r := range R {
     fmt.Printf("%d,%s\n", u, r)
   }
