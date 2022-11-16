@@ -157,6 +157,7 @@ func TestPrepare(t *testing.T) {
   }
   ret := prepare(inp)
 
+  // G
   expG := []game {
     game{ hi: 1, ai: 2, hs: 3, as: 0 },
     game{ hi: 1, ai: 2, hs: 1, as: 0 },
@@ -169,15 +170,25 @@ func TestPrepare(t *testing.T) {
     }
   }
 
-  expR := map[int64]string{
-    1: "10",
-    2:  "0",
-    3:  "1",
-    5:  "2",
-  }
+  // R
+  expR := map[int64]string{ 1: "10", 2: "0", 3: "1", 5: "2" }
   for u, r := range ret.R {
     if r.Cmp(decimal.RequireFromString(expR[u])) != 0 {
       t.Error("Expected", r, "for user", u, "to be", expR[u])
+    }
+  }
+
+  // T
+  if ret.T.mn.Cmp(decimal.NewFromInt(0)) != 0 {
+    t.Error("Expected", ret.T.mn, "to be", 0)
+  }
+  if ret.T.mx.Cmp(decimal.NewFromInt(13)) != 0 {
+    t.Error("Expected", ret.T.mx, "to be", 13)
+  }
+  expTperu := map[int64]int64{ 1: 13, 2: 4, 3: 4, 5: 5 }
+  for u, v := range ret.T.peru {
+    if v != expTperu[u] {
+      t.Error("Expected", v, "for user", u, "to be", expTperu[u])
     }
   }
 }
