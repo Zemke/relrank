@@ -183,11 +183,11 @@ func main() {
   steps := calcSteps(prep.G)
   dd("steps:", steps)
   R := apply(prep, steps, relRel, prep.R)
-  scaleMx, err := decimal.NewFromString(getenv("RELRANK_SCALE_MAX", "0"));
-  if err != nil {
-    log.Fatalln("RELRANK_SCALE_MAX is not a number")
-  }
-  if scaleMx.Cmp(decimal.Zero) != 0 {
+  if v, ok := os.LookupEnv("RELRANK_SCALE_MAX"); ok {
+    scaleMx, err := decimal.NewFromString(v)
+    if err != nil {
+      log.Fatalln("RELRANK_SCALE_MAX is not a number")
+    }
     if scaleMx.Cmp(decimal.Zero) < 0 {
       log.Fatalln("RELRANK_SCALE_MAX must be positive")
     }
