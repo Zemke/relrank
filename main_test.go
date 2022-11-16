@@ -168,5 +168,17 @@ func TestPrepare(t *testing.T) {
       t.Error("Expected", g, "to be", expG[i])
     }
   }
+
+  expR := map[int64]string{
+    1: "10",
+    2:  "0",
+    3:  "1",
+    5:  "2",
+  }
+  for u, r := range ret.R {
+    if r.Cmp(decimal.RequireFromString(expR[u])) != 0 {
+      t.Error("Expected", r, "for user", u, "to be", expR[u])
+    }
+  }
 }
 
