@@ -199,6 +199,25 @@ func TestPrepare(t *testing.T) {
       t.Error("Expected", v, "for user", u, "to be", expWT[u])
     }
   }
+
+  // OPP
+  expOPP := map[int64]map[int64]int64{
+    1: map[int64]int64{ 2: 4, 3: 3, 5: 3 },
+    2: map[int64]int64{ 1: 0, 3: 0, 5: 0 },
+    3: map[int64]int64{ 1: 1, 2: 0, 5: 0 },
+    5: map[int64]int64{ 1: 2, 2: 0, 3: 0 },
+  }
+  for u, oo := range ret.OPP {
+    if len(oo) > 4 {
+      t.Error("There should only be 4 opponents, is", len(oo))
+    }
+    for o, w := range oo {
+      if w != expOPP[u][o] {
+        t.Error("Expected", w, "for user", u, "against", o, "to be", expOPP[u])
+      }
+    }
+  }
+
   // mxWonOpp
   if ret.mxWonOpp != 4 {
     t.Error("Expected", ret.mxWonOpp, "to be", 4)
