@@ -180,6 +180,7 @@ func main() {
   dd("T.mn, T.mx:", prep.T.mn, prep.T.mx)
   dd("WT:", prep.WT)
   dd("OPP:", prep.OPP)
+  dd("mxWonOpp:", prep.mxWonOpp)
 
   relRel, err := decimal.NewFromString(getenv("RELRANK_RELREL", "20"));
   if err != nil {
