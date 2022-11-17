@@ -99,7 +99,7 @@ func prepare(inp []string) prep {
   T := total{ peru: map[int64]int64{}, }
   OPP := map[int64]map[int64]int64{}
   WT := map[int64]int64{}
-  for u, _ := range R {
+  for u := range R {
     OPP[u] = map[int64]int64{}
     for _, g := range G {
       if u == g.hi {
@@ -222,7 +222,7 @@ func apply(prep prep,
            R map[int64]decimal.Decimal) map[int64]decimal.Decimal {
   up, L := distinctPositionsAsc(R)
   rels := map[int64]decimal.Decimal{}
-  for u, _ := range prep.R {
+  for u := range prep.R {
     relis := []decimal.Decimal{
       byQuality(prep.OPP[u], prep.WT[u], up, L),
       byFarming(prep.mxWonOpp, prep.WT[u], prep.OPP[u]),
@@ -344,12 +344,6 @@ func round(R map[int64]decimal.Decimal,
 func dd(ss ...any) {
   if debug != "0" {
     log.Println(ss...)
-  }
-}
-
-func ddf(s string, ss ...any) {
-  if debug != "0" {
-    log.Printf(s, ss...)
   }
 }
 
