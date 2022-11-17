@@ -255,6 +255,7 @@ func TestRound(t *testing.T) {
 }
 
 func TestApply(t *testing.T) {
+  decimal.DivisionPrecision = 5
   prep := prep{
     G: []game{game{1, 2, 3, 0}, game{2, 1, 3, 2}, game{3, 1, 2, 1}},
     R: map[int64]decimal.Decimal{
@@ -275,16 +276,17 @@ func TestApply(t *testing.T) {
     WT: map[int64]int64{1: 6, 2: 3, 3: 2},
     mxWonOpp: 5,
   }
-  ret := apply(prep, 1, decimal.NewFromInt(20), prep.R)
+  ret := apply(prep, 3, decimal.NewFromInt(20), prep.R)
   expR := map[int64]string{
-    1: "32.6434072521248538",
-    2: "16.7719625187415539",
-    3: "11.0334075518768352",
+    1: "966.238766151319158",
+    2: "524.216272629898488",
+    3: "335.792088726969422",
   }
   for u, r := range expR {
     if decimal.RequireFromString(r).Cmp(ret[u]) != 0 {
       t.Error("Expected", ret[u], "to equal", r, "for user", u)
     }
   }
+  decimal.DivisionPrecision = 20
 }
 
