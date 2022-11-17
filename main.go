@@ -170,11 +170,10 @@ func main() {
   }
 
   prep := prepare(inp)
-  for i, g := range prep.G {
-    dd(i, g)
-  }
-  dd("R", prep.R)
-  dd("T", prep.T)
+  dd("G:", prep.G)
+  dd("R:", prep.R)
+  dd("T.peru:", prep.T.peru)
+  dd("T.mn, T.mx:", prep.T.mn, prep.T.mx)
   dd("WT:", prep.WT)
   dd("OPP:", prep.OPP)
 
