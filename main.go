@@ -170,10 +170,7 @@ func main() {
     }
     inp = strings.Split(ll[:len(ll)-1], "\n")
   } else {
-    if len(os.Args) > 1 {
-      file := os.Args[1]
-      log.Fatalf("File is %s but it's not yet supported\n", file)
-    }
+    log.Fatalln("Pass input into stdin")
   }
 
   prep := prepare(inp)
