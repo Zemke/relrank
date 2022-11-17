@@ -21,10 +21,10 @@ The input is supplied to stdin in a comma-separated format:
 You can provide one game per line or have rounds between two users already
 accumulated.
 
-End of input is signaled with a new line containing `EOF`.
+**It is important to end with a new line, otherwise the last line is ignored**
 
 ```console
-$ printf "1,2,3,0\n2,1,3,2\n3,1,2,1\nEOF" | DEBUG=0 RELRANK_RELREL=1 RELRANK_PREC=50 go run .
+$ printf "1,2,3,0\n2,1,3,2\n3,1,2,1\n" | DEBUG=0 RELRANK_RELREL=1 RELRANK_PREC=50 go run .
 1,3.79623560553611560876292427322945022268478343227734
 2,2.22542344452808269830422383031407485820025284071526
 3,1.40227170125122347764436998858737937735570257653784

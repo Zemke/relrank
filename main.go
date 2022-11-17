@@ -4,6 +4,7 @@ import (
   "fmt"
   "log"
   "strings"
+  "io"
   "bufio"
   "os"
   "math"
@@ -161,8 +162,8 @@ func main() {
     reader := bufio.NewReader(os.Stdin)
     ll, _ := reader.ReadString('\n')
     for {
-      l, _ := reader.ReadString('\n')
-      if l == "EOF" {
+      l, err := reader.ReadString('\n')
+      if err == io.EOF {
         break
       }
       ll += l
