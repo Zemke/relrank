@@ -254,3 +254,37 @@ func TestRound(t *testing.T) {
   }
 }
 
+func TestApply(t *testing.T) {
+  prep := prep{
+    G: []game{game{1, 2, 3, 0}, game{2, 1, 3, 2}, game{3, 1, 2, 1}},
+    R: map[int64]decimal.Decimal{
+      1: decimal.NewFromInt(6),
+      2: decimal.NewFromInt(3),
+      3: decimal.NewFromInt(2),
+    },
+    T: total{
+      peru: map[int64]int64{1: 11, 2: 8, 3: 3},
+      mn: decimal.NewFromInt(0),
+      mx: decimal.NewFromInt(11),
+    },
+    OPP: map[int64]map[int64]int64{
+      1: map[int64]int64{2: 5, 3: 1},
+      2: map[int64]int64{1: 3},
+      3: map[int64]int64{1: 2},
+    },
+    WT: map[int64]int64{1: 6, 2: 3, 3: 2},
+    mxWonOpp: 5,
+  }
+  ret := apply(prep, 1, decimal.NewFromInt(20), prep.R)
+  expR := map[int64]string{
+    1: "32.6434072521248538",
+    2: "16.7719625187415539",
+    3: "11.0334075518768352",
+  }
+  for u, r := range expR {
+    if decimal.RequireFromString(r).Cmp(ret[u]) != 0 {
+      t.Error("Expected", ret[u], "to equal", r, "for user", u)
+    }
+  }
+}
+
