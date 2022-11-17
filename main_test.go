@@ -230,9 +230,23 @@ func TestScale(t *testing.T) {
     2: decimal.NewFromInt(53),
     3: decimal.NewFromInt(11),
   }
-
   ret := scale(R, decimal.NewFromInt(10))
   exp := map[int64]string{ 1: "10", 2: "5.3", 3: "1.1" }
+  for u, ex := range exp {
+    if decimal.RequireFromString(ex).Cmp(ret[u]) != 0 {
+      t.Error("Excpected", ret[u], "to equal", ex)
+    }
+  }
+}
+
+func TestRound(t *testing.T) {
+  R := map[int64]decimal.Decimal{
+    1: decimal.RequireFromString("1234.1234"),
+    2: decimal.RequireFromString("12.35666"),
+    3: decimal.RequireFromString("12"),
+  }
+  ret := round(R, 1)
+  exp := map[int64]string{ 1: "1234.1", 2: "12.4", 3: "12" }
   for u, ex := range exp {
     if decimal.RequireFromString(ex).Cmp(ret[u]) != 0 {
       t.Error("Excpected", ret[u], "to equal", ex)
