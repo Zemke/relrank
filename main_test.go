@@ -287,6 +287,6 @@ func TestApply(t *testing.T) {
       t.Error("Expected", ret[u], "to equal", r, "for user", u)
     }
   }
-  decimal.DivisionPrecision = 20
+  decimal.DivisionPrecision = DEFAULT_PRECISION
 }
 

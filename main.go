@@ -12,6 +12,8 @@ import (
   "github.com/shopspring/decimal"
 )
 
+const DEFAULT_PRECISION int = 20
+
 var d99 = decimal.NewFromInt(99)
 var d100 = decimal.NewFromInt(100)
 var dmn = decimal.RequireFromString("0.01")
@@ -146,7 +148,7 @@ func prepare(inp []string) prep {
 
 func main() {
   log.SetFlags(0)
-  prec, err := strconv.Atoi(getenv("RELRANK_PREC", "50"))
+  prec, err := strconv.Atoi(getenv("RELRANK_PREC", strconv.Itoa(DEFAULT_PRECISION)))
   if err != nil {
     log.Fatalln("Precision from RELRANK_PREC is invalid - should be int")
   }
