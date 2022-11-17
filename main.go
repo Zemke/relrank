@@ -51,6 +51,10 @@ func getenv(env string, def string) string {
   return def
 }
 
+func setPrecision(prec int) {
+  decimal.DivisionPrecision = prec
+}
+
 func calcSteps(G []game) int {
   var relSteps, err = strconv.ParseFloat(getenv("RELRANK_RELTEPS", "15.9"), 64)
   dd("relSteps:", relSteps)
@@ -146,7 +150,7 @@ func main() {
   if err != nil {
     log.Fatalln("Precision from RELRANK_PREC is invalid - should be int")
   }
-  decimal.DivisionPrecision = prec
+  setPrecision(prec)
   dd("precision:", decimal.DivisionPrecision)
 
   stat, _ := os.Stdin.Stat()
