@@ -13,9 +13,9 @@ func TestByEffort(t *testing.T) {
     mx: decimal.NewFromInt(5),
   }
   rett := []decimal.Decimal{
-    byEffort(2, T), 
-    byEffort(3, T), 
-    byEffort(1, T), 
+    byEffort(2, T),
+    byEffort(3, T),
+    byEffort(1, T),
   }
   isSorted := sort.SliceIsSorted(rett, func (i, j int) bool {
     return rett[i].Cmp(rett[j]) < 0
@@ -234,7 +234,7 @@ func TestScale(t *testing.T) {
   exp := map[int64]string{ 1: "10", 2: "5.3", 3: "1.1" }
   for u, ex := range exp {
     if decimal.RequireFromString(ex).Cmp(ret[u]) != 0 {
-      t.Error("Excpected", ret[u], "to equal", ex)
+      t.Error("Expected", ret[u], "to equal", ex)
     }
   }
 }
@@ -249,7 +249,7 @@ func TestRound(t *testing.T) {
   exp := map[int64]string{ 1: "1234.1", 2: "12.4", 3: "12" }
   for u, ex := range exp {
     if decimal.RequireFromString(ex).Cmp(ret[u]) != 0 {
-      t.Error("Excpected", ret[u], "to equal", ex)
+      t.Error("Expected", ret[u], "to equal", ex)
     }
   }
 }
