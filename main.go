@@ -287,6 +287,9 @@ func distinctPositionsAsc(R map[int64]decimal.Decimal) (map[int64]int64, decimal
 }
 
 func byQuality(o map[int64]int64, w int64, up map[int64]int64, L decimal.Decimal) decimal.Decimal {
+  if w == 0 {
+    return decimal.Zero
+  }
   rel := decimal.Zero
   wt := decimal.NewFromInt(w)
   for u, w1 := range o {
