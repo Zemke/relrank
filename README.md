@@ -2,16 +2,6 @@
 
 Ranking system for ladder rankings where games are won in best out of X rounds.
 
-## Implementation
-
-The relative ranking system is currently implemented in PHP as part of
-[Worms League](https://github.com/Zemke/worms-league).
-
-It is planned to reimplement is using Go.
-The CLI application should allow for usage outside of Worms League or any
-particular league so that it can supplied only with games played and output
-the ranking.
-
 ## Usage
 
 The input is supplied to stdin in a comma-separated format:
@@ -22,6 +12,17 @@ You can provide one game per line or have rounds between two users already
 accumulated.
 
 **It is important to end with a new line, otherwise the last line is ignored**
+
+## Implementation
+
+An original implementation has been as part of
+[Worms League](https://github.com/Zemke/worms-league).
+It was battle-tested and performed convincingly.
+
+Now there is a self-contained CLI application written in Go.
+This application should allow for usage outside of Worms League or any
+particular league so that it can supplied only with the games that were played
+and then output the ranking.
 
 ```console
 $ printf "1,2,3,0\n2,1,3,2\n3,1,2,1\n" | DEBUG=0 RELRANK_RELREL=1 RELRANK_PREC=50 go run .
