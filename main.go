@@ -160,7 +160,7 @@ func main() {
   var inp []string
   if (stat.Mode() & os.ModeCharDevice) == 0 {
     reader := bufio.NewReader(os.Stdin)
-    ll, _ := reader.ReadString('\n')
+    var ll string
     for {
       l, err := reader.ReadString('\n')
       if err == io.EOF {
