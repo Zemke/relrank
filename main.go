@@ -81,8 +81,12 @@ func calcSteps(G []game) int {
 
 func prepare(inp []string) prep {
   var G []game
-  for _, l := range inp {
+  for k, l := range inp {
     sp := strings.Split(l, ",")
+    if _, err := strconv.ParseInt(sp[2] + sp[3], 10, 64); err != nil && k == 0 {
+      dd("skipping csv header")
+      continue
+    }
     var vv, err = [...]interface{}{sp[0], sp[1], sp[2], sp[3]}, error(nil)
     gvv := [4]int64{}
     for i, v := range vv  {
