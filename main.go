@@ -319,8 +319,7 @@ func byFarming(mxWonOpp int64, uw int64, oo map[int64]int64) decimal.Decimal {
 }
 
 func byEffort(u int64, T total) decimal.Decimal {
-  a, b, x := dmn, dmx, decimal.NewFromInt(T.peru[u])
-  return a.Add(x.Sub(T.mn).Mul(b.Sub(a)).Div(T.mx.Sub(T.mn)))
+  return minmax(dmn, dmx, T.mn, T.mx, decimal.NewFromInt(T.peru[u]))
 }
 
 func scale(R map[int64]decimal.Decimal,
@@ -334,9 +333,15 @@ func scale(R map[int64]decimal.Decimal,
   z := decimal.Zero
   R2 := map[int64]decimal.Decimal{}
   for u, r := range R {
-    R2[u] = z.Add(r.Sub(z).Mul(scaleMx.Sub(z)).Div(mx.Sub(z)))
+    R2[u] = minmax(z, scaleMx, z, mx, r)
   }
   return R2
+}
+
+func minmax(a decimal.Decimal, b decimal.Decimal,
+            mn decimal.Decimal, mx decimal.Decimal,
+            x decimal.Decimal) decimal.Decimal {
+  return a.Add(x.Sub(mn).Mul(b.Sub(a)).Div(mx.Sub(mn)))
 }
 
 func round(R map[int64]decimal.Decimal,
