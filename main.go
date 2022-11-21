@@ -59,7 +59,7 @@ func setPrecision(prec int) {
 }
 
 func calcSteps(G []game) int {
-  var relSteps, err = strconv.ParseFloat(getenv("RELRANK_RELTEPS", "15.9"), 64)
+  var relSteps, err = strconv.ParseFloat(getenv("RELRANK_RELTEPS", "20"), 64)
   dd("relSteps:", relSteps)
   if err != nil {
     log.Fatalf("%f is invalid for RELRANK_RELSTEPS\n", relSteps)
@@ -186,7 +186,7 @@ func main() {
   dd("OPP:", prep.OPP)
   dd("mxWonOpp:", prep.mxWonOpp)
 
-  relRel, err := decimal.NewFromString(getenv("RELRANK_RELREL", "20"));
+  relRel, err := decimal.NewFromString(getenv("RELRANK_RELREL", "15.9"));
   if err != nil {
     log.Fatalln("RELRANK_RELREL is not a number")
   }
