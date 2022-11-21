@@ -229,8 +229,8 @@ func apply(prep prep,
   for u := range prep.R {
     relis := []decimal.Decimal{
       byQuality(prep.OPP[u], prep.WT[u], up, L),
-      byFarming(prep.mxWonOpp, prep.WT[u], prep.OPP[u]),
-      byEffort(u, prep.T),
+      byFarming(prep.mxWonOpp, prep.WT[u], prep.OPP[u]),  // TODO never changes
+      byEffort(u, prep.T),  // TODO never changes
     }
     sm := decimal.Sum(relRel, relis...)
     rels[u] = sm.Div(decimal.NewFromInt(int64(len(relis)+1)))
