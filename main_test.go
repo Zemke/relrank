@@ -132,9 +132,9 @@ func TestCalcSteps(t *testing.T) {
     a int
     exp int
   }{
-    {   50, 12 },
-    {  150, 20 },
-    {   77, 15 },
+    {   50, 15 },
+    {  150, 21 },
+    {   77, 19 },
     { 1000, 21 },
   }
   for _, test := range tests {
