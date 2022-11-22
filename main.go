@@ -325,7 +325,7 @@ func byFarming(mxWonOpp int64, uw int64, oo map[int64]int64) decimal.Decimal {
 }
 
 func byEffort(u int64, T total) decimal.Decimal {
-  return minmax(dmn, dmx, T.mn, T.mx, decimal.NewFromInt(T.peru[u]))
+  return minmax(dmx, dmn, T.mn, T.mx, decimal.NewFromInt(T.peru[u]))
 }
 
 func scale(R map[int64]decimal.Decimal,
