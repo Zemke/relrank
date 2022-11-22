@@ -224,23 +224,29 @@ func apply(prep prep,
            steps int,
            relRel decimal.Decimal,
            R map[int64]decimal.Decimal) map[int64]decimal.Decimal {
-  up, L := distinctPositionsAsc(R)
-  rels := map[int64]decimal.Decimal{}
-  for u := range prep.R {
-    relis := []decimal.Decimal{
-      byQuality(prep.OPP[u], prep.WT[u], up, L),
-      byFarming(prep.mxWonOpp, prep.WT[u], prep.OPP[u]),  // TODO never changes
-      byEffort(u, prep.T),  // TODO never changes
-    }
-    sm := decimal.Sum(relRel, relis...)
-    rels[u] = sm.Div(decimal.NewFromInt(int64(len(relis)+1)))
-  }
   R2 := map[int64]decimal.Decimal{}
-  for u, rel := range rels {
-    R2[u] = R[u].Mul(rel)
+  farming := map[int64]decimal.Decimal{}
+  effort := map[int64]decimal.Decimal{}
+  for u,r := range R {
+    R2[u] = r
+    farming[u] = byFarming(prep.mxWonOpp, prep.WT[u], prep.OPP[u])
+    effort[u] = byEffort(u, prep.T)
   }
-  if steps > 1 {
-    R2 = apply(prep, steps-1, relRel, R2)
+  for i := 1; i <= steps; i++ {
+    up, L := distinctPositionsAsc(R2)
+    rels := map[int64]decimal.Decimal{}
+    for u := range prep.R {
+      relis := []decimal.Decimal{
+        byQuality(prep.OPP[u], prep.WT[u], up, L),
+        farming[u],
+        effort[u],
+      }
+      sm := decimal.Sum(relRel, relis...)
+      rels[u] = sm.Div(decimal.NewFromInt(int64(len(relis)+1)))
+    }
+    for u, rel := range rels {
+      R2[u] = R2[u].Mul(rel)
+    }
   }
   return R2
 }
