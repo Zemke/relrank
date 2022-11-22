@@ -308,7 +308,7 @@ func byQuality(o map[int64]int64, w int64, up map[int64]int64, L decimal.Decimal
 func byFarming(mxWonOpp int64, uw int64, oo map[int64]int64) decimal.Decimal {
   P := decimal.Zero
   if uw == 0 || mxWonOpp == 0 {
-    return d1
+    return P
   }
   for _, w := range oo {
     if w == 0 {
