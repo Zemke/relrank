@@ -13,6 +13,10 @@ import (
   "github.com/shopspring/decimal"
 )
 
+var perm_quality = decimal.RequireFromString(getenv("PERM_QUALITY", "1"))
+var perm_effort = decimal.RequireFromString(getenv("PERM_EFFORT", "1"))
+var perm_farming = decimal.RequireFromString(getenv("PERM_FARMING", "1"))
+
 const DEFAULT_PRECISION int = 20
 
 var d99 = decimal.NewFromInt(99)
@@ -237,9 +241,9 @@ func apply(prep prep,
     rels := map[int64]decimal.Decimal{}
     for u := range prep.R {
       relis := []decimal.Decimal{
-        byQuality(prep.OPP[u], prep.WT[u], up, L),
-        farming[u],
-        effort[u],
+        byQuality(prep.OPP[u], prep.WT[u], up, L).Mul(perm_quality),
+        farming[u].Mul(perm_farming),
+        effort[u].Mul(perm_effort),
       }
       sm := decimal.Sum(relRel, relis...)
       rels[u] = sm.Div(decimal.NewFromInt(int64(len(relis)+1)))

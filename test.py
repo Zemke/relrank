@@ -33,7 +33,15 @@ elif ',' in permenv:
 else:
   perms = [(None, None)]
 
-for relRel,relSteps in tqdm(perms):
+permsb = list(itertools.product(
+  [1.+(i/10) for i in range(-3, 4, 1)],
+  [1.+(i/10) for i in range(-3, 4, 1)],
+  [1.+(i/10) for i in range(-3, 4, 1)],
+))
+
+#for relRel,relSteps in tqdm(perms):
+relRel,relSteps = None, None
+for perm_quality,perm_farming,perm_effort in tqdm(permsb):
   debug = os.getenv('DEBUG', '0')
   minw = int(os.getenv('MINW', '5'))
   print('minw', minw)
@@ -42,6 +50,9 @@ for relRel,relSteps in tqdm(perms):
     env += f" RELRANK_RELREL={relRel:.2f}"
   if relSteps is not None:
     env += f" RELRANK_RELSTEPS={relSteps}"
+  env += f" PERM_QUALITY={perm_quality:.1f}"
+  env += f" PERM_FARMING={perm_farming:.1f}"
+  env += f" PERM_EFFORT={perm_effort:.1f}"
   print('env', env)
   nn = [int(sys.argv[1])] if len(sys.argv) > 1 else [39,40,41]
   maes, rmses = 0, 0
