@@ -9,6 +9,17 @@ import itertools
 from tqdm.auto import tqdm
 import time
 
+class MinMax:
+  def __init__(self, a, b, mn, mx):
+    self.a = a
+    self.b = b
+    self.mn = mn
+    self.mx = mx
+  def __call__(self, x):
+    numer = (x-self.mn)*(self.b-self.a)
+    denom = self.mx-self.mn
+    return self.a + (numer/denom)
+
 U = {i: n for i,n in [l.split(',') for l in open('csv/users.csv', 'r').read().splitlines()]}
 
 if os.getenv('PERM', '0') == '1':
@@ -35,8 +46,7 @@ for relRel,relSteps in tqdm(perms):
       C[ai] += int(asc)
     uws = [str(u) for u,w in C.items() if w >= minw]
     R = {u: r for u,r in [l.split(',') for l in open(f'csv/{n}ranking.csv', 'r').read().splitlines()]}
-    mx = max([float(r) for _, r in list(R.items())[1:]])
-    cmd = f'{env} RELRANK_SCALE_MAX={mx} go run . < csv/{n}games.csv'
+    cmd = f'{env} go run . < csv/{n}games.csv'
     if debug == '1':
       print('cmd', cmd)
     out = sp.run(cmd, shell=True, capture_output=True, text=True)
@@ -49,6 +59,10 @@ for relRel,relSteps in tqdm(perms):
       print(out.stdout)
     F = []
     pad = 0
+    a, b = +math.inf, -math.inf
+    mn, mx = +math.inf, -math.inf
+    a = max([float(r) for _, r in list(R.items())[1:]])
+    mn = +math.inf
     for l in urr:
       u,r = l.split(',')
       if u not in R or u not in uws:
@@ -57,12 +71,18 @@ for relRel,relSteps in tqdm(perms):
         continue
       pad = max(pad, len(r))
       F.append((float(r), float(R[u]), U[u]))
+      a = min(a, float(R[u]))
+      b = max(b, float(R[u]))
+      mn = min(mn, float(r))
+      mx = max(mx, float(r))
+    minmax = MinMax(a, b, mn, mx)
     F.sort()
     dd = []
     for rn,ro,u in F[::-1]:
+      rn_norm = minmax(rn)
       if debug == '1':
-        print(f"{rn:6.2f},{ro:6.2f},{u}")
-      dd.append(rn - ro)
+        print(f"{rn_norm:6.2f},{ro:6.2f},{u}")
+      dd.append(rn_norm - ro)
     mae = sum([abs(dd[i-1] - dd[i]) for i in range(1, len(dd))]) / len(dd)
     print(n, 'MAE', mae)
     rmse = math.sqrt(sum([(dd[i-1] - dd[i])**2 for i in range(1, len(dd))]) / len(dd))
