@@ -186,7 +186,7 @@ func main() {
   dd("OPP:", prep.OPP)
   dd("mxWonOpp:", prep.mxWonOpp)
 
-  relRel, err := decimal.NewFromString(getenv("RELRANK_RELREL", "10.1"));
+  relRel, err := decimal.NewFromString(getenv("RELRANK_RELREL", "15.1"));
   if err != nil {
     log.Fatalln("RELRANK_RELREL is not a number")
   }
