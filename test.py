@@ -28,13 +28,18 @@ if os.getenv('PERM', '0') == '1':
     [20+ch for ch in range(-15, 11, 1)],
   ))
 else:
-  perms = [(16.7, 5)]
+  perms = [(None, None)]
 
 for relRel,relSteps in tqdm(perms):
   debug = os.getenv('DEBUG', '0')
   minw = int(os.getenv('MINW', '5'))
   print('minw', minw)
-  print('env', env := f"DEBUG={debug} RELRANK_RELREL={relRel:.2f} RELRANK_RELSTEPS={relSteps} RELRANK_ROUND=2")
+  env = f"DEBUG={debug} RELRANK_ROUND=2"
+  if relRel is not None:
+    env += f" RELRANK_RELREL={relRel:.2f}"
+  if relSteps is not None:
+    env += f" RELRANK_RELSTEPS={relSteps}"
+  print('env', env)
   nn = [int(sys.argv[1])] if len(sys.argv) > 1 else [38,39,40,41]
   maes, rmses = 0, 0
   for n in nn:
