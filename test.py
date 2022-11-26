@@ -89,7 +89,7 @@ for relRel,relSteps in tqdm(perms):
     for rn,ro,u in F[::-1]:
       rn_norm = minmax(rn)
       if debug == '1':
-        print(f"{rn:6.2f},{ro:6.2f},{u}")
+        print(f"{rn_norm:6.2f},{ro:6.2f},{u}")
       dd.append(rn_norm - ro)
     mae = sum([abs(dd[i-1] - dd[i]) for i in range(1, len(dd))]) / len(dd)
     print(n, 'MAE', mae)
