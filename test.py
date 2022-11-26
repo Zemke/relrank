@@ -43,7 +43,7 @@ for relRel,relSteps in tqdm(perms):
   if relSteps is not None:
     env += f" RELRANK_RELSTEPS={relSteps}"
   print('env', env)
-  nn = [int(sys.argv[1])] if len(sys.argv) > 1 else [39,40,41]
+  nn = [int(sys.argv[1])] if len(sys.argv) > 1 else [39,40,41,42]
   maes, rmses = 0, 0
   for n in nn:
     print('season', n)
