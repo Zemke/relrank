@@ -309,7 +309,7 @@ relativization each. The greater the difference to $1$ the greater the impact
 of relativization as $1$ would not impact the result at all.
 
 Here `relRel` configuration comes into play.
-It is added to the relativizationland then the average of these result in the
+It is added to the relativization and then the average of these result in the
 final relativization.
 
 In practice the average of three relativizers (as mentioned earlier) and
