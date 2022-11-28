@@ -18,19 +18,19 @@ func TestByEffort(t *testing.T) {
     byEffort(1, T),
   }
   isSorted := sort.SliceIsSorted(rett, func (i, j int) bool {
-    return rett[i].Cmp(rett[j]) < 0
+    return rett[i].Cmp(rett[j]) > 0
   })
   if !isSorted {
     t.Error(rett, "is not ascending")
   }
-  if rett[0].Cmp(dmn) != 0 {
-    t.Error(rett[0], "should be", dmn)
+  if rett[0].Cmp(dmx) != 0 {
+    t.Error(rett[0], "should be", dmx)
   }
-  if rett[len(rett)-1].Cmp(dmx) != 0 {
-    t.Error(rett[len(rett)-1], "should be", dmx)
+  if rett[len(rett)-1].Cmp(dmn) != 0 {
+    t.Error(rett[len(rett)-1], "should be", dmn)
   }
   two := decimal.NewFromInt(2)
-  mid := rett[len(rett)-1].Div(two).Add(dmn.Div(two))
+  mid := rett[0].Div(two).Add(dmn.Div(two))
   if rett[1].Cmp(mid) != 0 {
     t.Error(rett[1], "should be", mid)
   }
@@ -278,9 +278,9 @@ func TestApply(t *testing.T) {
   }
   ret := apply(prep, 3, decimal.NewFromInt(20), prep.R)
   expR := map[int64]string{
-    1: "966.238766151319158",
-    2: "524.216272629898488",
-    3: "335.792088726969422",
+    1: "840.279523533764658",
+    2: "493.202639535103488",
+    3: "356.756871775111922",
   }
   for u, r := range expR {
     if decimal.RequireFromString(r).Cmp(ret[u]) != 0 {
