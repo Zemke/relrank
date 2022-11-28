@@ -22,6 +22,11 @@ $ printf "1,2,3,0\n2,1,3,2\n3,1,2,1\n" | go run .
 
 It returns the user ID and its calculated rating as in `user,rating` per line.
 
+The ranking system relies on rounds won and doesn't care about games.
+You can have even drawn games. \
+
+### Config
+
 There are multiple environment variables to tweak the execution:
 
 `DEBUG=1` logs debug information to stderr. \
@@ -354,11 +359,6 @@ round played.**
 
 The maximum rating of a use according to which to scale all other users'
 points can be set with the `RELRANK_SCALE_MAX` environment variable.
-
-## More
-
-The ranking system relies on rounds won and doesn't care about games.
-You can have even drawn games.
 
 ## Validation Testing
 
