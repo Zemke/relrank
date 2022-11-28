@@ -89,7 +89,7 @@ One gets one point per won round.
 
 This is now an absolute state.
 The idea of the relative ranking system is to put this absolute rating of each
-players into perspective – into context.
+players into perspective — into context.
 
 ### Relativizers
 
@@ -134,7 +134,7 @@ distinct ratings.
 
 ![Quality relativizer](images/quality.png)
 
-The highest rated player – being at position 16 in $n$ – is worth a 100
+The highest rated player — being at position 16 in $n$ — is worth a 100
 percent so that the result for $max(n)$ is always $1$.
 Won rounds are exponentially less relativized the higher the opponent is rated.
 
@@ -231,7 +231,7 @@ $$ max(x) \to 1 $$
 
 $$ min(x) \to 0.01 $$
 
-$$ y = a + \frac{(x - {min}(x))(b-a)}{{max}(x)-{min}(x)} $$
+$$ y = a + \frac{(x - {min}(x))(b-a)}{\max(x)-{min}(x)} $$
 
 ![Effort relativizer](images/effort.png)
 
@@ -240,7 +240,7 @@ $$ y = a + \frac{(x - {min}(x))(b-a)}{{max}(x)-{min}(x)} $$
 Each calculation of a relative ranking starts with an absolute ranking.
 They’re put into relation using relativizers.
 
-Since two perspectives – an absolute and a relative – are put against each
+Since two perspectives — an absolute and a relative — are put against each
 other, it is necessary to balance them out.
 
 The more relativity is “applied” to the absolute information, the less the
@@ -348,7 +348,7 @@ the numbers can be rescaled using min-max normalization.
 Consider $a$ to be the number of points the lowest rated player should have
 and $b$ the number of points the highest rated player should have.
 
-$$ a + \frac{(x - {min}(x))(b-a)}{{max}(x)-{min}(x)} $$
+$$ a + \frac{(x - {min}(x))(b-a)}{\max{x}-{min}(x)} $$
 
 To make numbers increase as more rounds are played one can make $b$ the
 maximum number of rounds of any player. This adds to points being more
