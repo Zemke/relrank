@@ -22,7 +22,7 @@ $ printf "1,2,3,0\n2,1,3,2\n3,1,2,1\n" | go run .
 
 It returns the user ID and its calculated rating as in `user,rating` per line.
 
-The ranking system relies on rounds won and doesn't care about games.
+The ranking system relies on rounds won and doesn’t care about games.
 You can have even drawn games. \
 
 ### Config
@@ -56,11 +56,11 @@ Go is also faster than PHP and a better suit for a standalone CLI application.
 In the public world one is accustomed to absolute ranking system.
 These are self-contained perfect.
 Everyone plays everyone the same amount of times.
-Therefore there's no need in complexity to assess a points pattern other than
+Therefore there’s no need in complexity to assess a points pattern other than
 addition.
 The fixtures are inherently perfect.
 
-This is not typically the case in online games where there's a fixed schedule
+This is not typically the case in online games where there’s a fixed schedule
 and not everyone is necessarily playing everyone the same amount of times.
 So players may never clash, others multiple times.
 An absolute ranking would make players end up top who win most of their games.
@@ -68,7 +68,7 @@ In other words, possibly the most active or the one playing the weakest players.
 
 ## Solution
 
-Therefore the series of a user has to be evaluated within a context that's
+Therefore the series of a user has to be evaluated within a context that’s
 **relative** to all the other contenders in.
 
 The most blatant example is a victory against a higher ranked other player
@@ -89,7 +89,7 @@ One gets one point per won round.
 
 This is now an absolute state.
 The idea of the relative ranking system is to put this absolute rating of each
-players into perspective -- into context.
+players into perspective – into context.
 
 ### Relativizers
 
@@ -104,12 +104,12 @@ One is more likely to add won rounds based on these factors:
 These three factors are relative among themselves again.
 For instance the more number of rounds against the same opponent of a weaker
 skill level, the more likely one is to gain won rounds and vice versa. \
-If one is generally playing more rounds, it's more likely to accumulate won
+If one is generally playing more rounds, it’s more likely to accumulate won
 rounds, too.
 
 These are the three main factors used in the relative ranking system.
 These can be referenced to put the absolute value of won rounds into a context.
-Therefore they relativize an absolute number and are thus called "relativizers."
+Therefore they relativize an absolute number and are thus called “relativizers.”
 
 #### `quality`
 
@@ -129,12 +129,12 @@ $$ \sum_{i=1}^{o}{((n_i+1)/n)^3 * w_i/t} $$
 This is averaged so that number of rounds per opponent are accounted for
 proportionally.
 
-Here is the opponent's position to relativization plot for a total of $n=16$
+Here is the opponent’s position to relativization plot for a total of $n=16$
 distinct ratings.
 
 ![Quality relativizer](images/quality.png)
 
-The highest rated player -- being at position 16 in $n$ -- is worth a 100
+The highest rated player – being at position 16 in $n$ – is worth a 100
 percent so that the result for $max(n)$ is always $1$.
 Won rounds are exponentially less relativized the higher the opponent is rated.
 
@@ -145,7 +145,7 @@ first and third place than it is for 20th and 23rd.
 
 One fact special to this relativizer is that its input parameters possibly
 change with each step.
-Since an input parameter is the opponent's rating and it may change with each
+Since an input parameter is the opponent’s rating and it may change with each
 step.
 
 #### `farming`
@@ -153,11 +153,11 @@ step.
 The `farming` relativizer relativizes won rounds in the context of how often
 that user played against the same opponent.
 Each won round weighing less than the previous.
-This retaliates the infamous "noob bashing" where a better
+This retaliates the infamous “noob bashing” where a better
 player repeatedly defeats a very low rated player to farm points from.
 
 Additionally this promotes users to have diverse pairings.
-Certainly a user's rating is easier to assess the more data is available. \
+Certainly a user’s rating is easier to assess the more data is available. \
 Theoretically you can gain more points from defeating a low rated player for the
 first time than gaining a hundredth won round against a high rated player.
 
@@ -180,7 +180,7 @@ $$ y=-ln(x)+1 $$
 ![Farming fundamental logarithm](images/farming_fundamental.png)
 
 Adding $1$ controls where $y$ intercepts at $x=1$.
-Let's make it variable to make it clearer: $y=-ln(x)+k$
+Let’s make it variable to make it clearer: $y=-ln(x)+k$
 It is desired to make it so that when $x=1$ and $k=1$ then $y$ should resolve
 to $1$.
 This is because $x$ is the round and the first round should always be valued at
@@ -213,7 +213,7 @@ with everything in between decreasing towars $0.01$ logarithmically.
 This formula is applied to each round per opponent so that $x$ is a set where
 each number represents the $n$-th won round.
 
-$$ X = \lbrace 1, 2, 3, 4, ... \rbrace $$
+$$ X = \lbrace 1, 2, 3, 4, … \rbrace $$
 
 This is then averaged across the total number of won rounds.
 The final formula to output the factor of relativization:
@@ -238,12 +238,12 @@ $$ y = a + \frac{(x - {min}(x))(b-a)}{{max}(x)-{min}(x)} $$
 ### Relativization Steps
 
 Each calculation of a relative ranking starts with an absolute ranking.
-They're put into relation using relativizers.
+They’re put into relation using relativizers.
 
-Since two perspectives -- an absolute and a relative -- are put against each
+Since two perspectives – an absolute and a relative – are put against each
 other, it is necessary to balance them out.
 
-The more relativity is "applied" to the absolute information, the less the
+The more relativity is “applied” to the absolute information, the less the
 original absolute value has any weight in the final outcome.
 Potentially leading to an entirely unfounded result as the relativization
 process to relativize itself more and more.
@@ -304,7 +304,7 @@ In the first relativization step that is the absolute number of won rounds of
 that user in all subsequent steps it is the rating of that user.
 
 In other words: Prior to any relativization, the rating of a user is simply
-that user's won rounds, in all subsequent steps it is the relativization
+that user’s won rounds, in all subsequent steps it is the relativization
 result of the previous step.
 In the first step the won rounds are relativized and that result is to be
 relativized in the next step and so on and so forth.
@@ -354,10 +354,10 @@ To make numbers increase as more rounds are played one can make $b$ the
 maximum number of rounds of any player. This adds to points being more
 relatable over time.
 
-**In the relative ranking system everyone's points may change with just one new
+**In the relative ranking system everyone’s points may change with just one new
 round played.**
 
-The maximum rating of a use according to which to scale all other users'
+The maximum rating of a use according to which to scale all other users’
 points can be set with the `RELRANK_SCALE_MAX` environment variable.
 
 ## Validation Testing
@@ -375,18 +375,18 @@ that target system.
 ## Mean Absolute Error
 
 This metric is interesting and human-readable.
-This is the average difference of a user's rating compared to the target system.
+This is the average difference of a user’s rating compared to the target system.
 
 $$ 16.515357399195885 = \sum_{i=1}^{D}|x_i-y_i| $$
 
 ## Root Mean-Squared Error
 
-This metric isn't really human-readable because like mean absolute error but
-it's defining metric to measure how well the algorithm performs. \
+This metric isn’t really human-readable because like mean absolute error but
+it’s defining metric to measure how well the algorithm performs. \
 The edge it has over MAE that due to it weighs big differences heavier than
 small ones.
 
-There is testing in place making sure RMSE doesn't increase.
+There is testing in place making sure RMSE doesn’t increase.
 
 $$ 23.54168716924731 = \sqrt{(\frac{1}{n})\sum_{i=1}^{n}(y_{i} - x_{i})^{2}} $$
 
