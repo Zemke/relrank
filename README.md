@@ -15,9 +15,9 @@ accumulated.
 
 ```console
 $ printf "1,2,3,0\n2,1,3,2\n3,1,2,1\n" | go run .
-1,3.79623560553611560876292427322945022268478343227734
-2,2.22542344452808269830422383031407485820025284071526
-3,1.40227170125122347764436998858737937735570257653784
+3,38.7940217999804307425334034878722275274658
+1,94.4733759805052229464094241552471635973446
+2,54.2679612557235192475522802224982500417932
 ```
 
 It returns the user ID and its calculated rating as in `user,rating` per line.
@@ -55,11 +55,11 @@ Therefore there's no need in complexity to assess a points pattern other than
 addition.
 The fixtures are inherently perfect.
 
-This is not typically the case in online games where there's to fixed schedule
+This is not typically the case in online games where there's a fixed schedule
 and not everyone is necessarily playing everyone the same amount of times.
 So players may never clash, others multiple times.
 An absolute ranking would make players end up top who win most of their games.
-In other words, possible the most active or the one playing the weakest players.
+In other words, possibly the most active or the one playing the weakest players.
 
 ## Solution
 
@@ -80,11 +80,11 @@ they are not yet ranked.
 
 The most fundamental information that an absolute ranking could be generated
 from is the total won rounds.
-One gets one points per won round.
+One gets one point per won round.
 
 This is now an absolute state.
 The idea of the relative ranking system is to put this absolute rating of each
-players into perspective — into context.
+players into perspective -- into context.
 
 ### Relativizers
 
@@ -99,7 +99,7 @@ One is more likely to add won rounds based on these factors:
 These three factors are relative among themselves again.
 For instance the more number of rounds against the same opponent of a weaker
 skill level, the more likely one is to gain won rounds and vice versa. \
-If one is generally playing for rounds, it's more likely to accumulate won
+If one is generally playing more rounds, it's more likely to accumulate won
 rounds, too.
 
 These are the three main factors used in the relative ranking system.
@@ -138,6 +138,11 @@ more robust.
 For example the difference in skill of a player is likely to be greater between
 first and third place than it is for 20th and 23rd.
 
+One fact special to this relativizer is that its input parameters possibly
+change with each step.
+Since an input parameter is the opponent's rating and it may change with each
+step.
+
 #### `farming`
 
 The `farming` relativizer relativizes won rounds in the context of how often
@@ -149,7 +154,7 @@ player repeatedly defeats a very low rated player to farm points from.
 Additionally this promotes users to have diverse pairings.
 Certainly a user's rating is easier to assess the more data is available. \
 Theoretically you can gain more points from defeating a low rated player for the
-first time than gaining a bazillionth won round against a high rated player.
+first time than gaining a hundredth won round against a high rated player.
 
 The relativizer is made so that per opponent the first round is always worth $1$
 as in 100 percent.
@@ -170,7 +175,7 @@ $$ y=-ln(x)+1 $$
 ![Farming fundamental logarithm](images/farming_fundamental.png)
 
 Adding $1$ controls where $y$ intercepts at $x=1$.
-Let's make it variable to make it more clear: $y=-ln(x)+k$
+Let's make it variable to make it clearer: $y=-ln(x)+k$
 It is desired to make it so that when $x=1$ and $k=1$ then $y$ should resolve
 to $1$.
 This is because $x$ is the round and the first round should always be valued at
@@ -343,32 +348,77 @@ $$ a + \frac{(x - {min}(x))(b-a)}{{max}(x)-{min}(x)} $$
 To make numbers increase as more rounds are played one can make $b$ the
 maximum number of rounds of any player. This adds to points being more
 relatable over time.
-In the relative ranking system everyone's points may change with just one new
-round played.
+
+**In the relative ranking system everyone's points may change with just one new
+round played.**
+
+The maximum rating of a use according to which to scale all other users'
+points can be set with the `RELRANK_SCALE_MAX` environment variable.
 
 ## More
 
 The ranking system relies on rounds won and doesn't care about games.
 You can have even drawn games.
 
-## Testing
+## Validation Testing
 
 The algorithm is tested against another ranking system that is regarded as the
 best in Worms Armageddon online play.
 
-The current specifics is that the root mean-squared error is $20.7335$ and the
-mean absolute error is $13.63083$ for points that range from $2$ to $317$.
+The current specifics is that the root mean-squared error is
+$23.54168716924731$ and the mean absolute error is $16.515357399195885$.
 
 Many of the magic numbers in the formulas provided in this documentation
-originate from experimentation to drive down the root mean-squared error.
-
-## Root Mean-Squared Error
-
-There is testing in place making sure RMSE doesn't increase.
-
-$$ 20.7335 = \sqrt{(\frac{1}{n})\sum_{i=1}^{n}(y_{i} - x_{i})^{2}} $$
+originate from experimentation to drive down the root mean-squared error toward
+that target system.
 
 ## Mean Absolute Error
 
-$$ 13.63083 = \sum_{i=1}^{D}|x_i-y_i| $$
+This metric is interesting and human-readable.
+This is the average difference of a user's rating compared to the target system.
+
+$$ 16.515357399195885 = \sum_{i=1}^{D}|x_i-y_i| $$
+
+## Root Mean-Squared Error
+
+This metric isn't really human-readable because like mean absolute error but
+it's defining metric to measure how well the algorithm performs. \
+The edge it has over MAE that due to it weighs big differences heavier than
+small ones.
+
+There is testing in place making sure RMSE doesn't increase.
+
+$$ 23.54168716924731 = \sqrt{(\frac{1}{n})\sum_{i=1}^{n}(y_{i} - x_{i})^{2}} $$
+
+### Run Validation Test
+
+Tests are run by the `validate.py` script.
+
+Here is is run with ranking of users with at least one won round (`MINW=1`) for
+target seasons 39, 40, 41 and 42.
+
+Note that the number of games played per season is very different.
+Seasons with many games played generally have greater ratings and lead to
+greater MAE and RMSE.
+
+```console
+$ DEBUG=0 PERM=0 MINW=1 python3 validate.py
+minw 1
+env DEBUG=0 RELRANK_ROUND=2
+season 39
+39 MAE 25.55278493305227
+39 RMSE 36.456688788966446
+season 40
+40 MAE 14.376024564718678
+40 RMSE 20.091997886647718
+season 41
+41 MAE 0.7738193555490799
+41 RMSE 0.8859498890892478
+season 42
+42 MAE 25.358800743463515
+42 RMSE 36.73211211228584
+average
+MAE 16.515357399195885
+RMSE 23.54168716924731
+```
 
