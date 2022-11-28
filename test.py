@@ -58,13 +58,17 @@ for relRel,relSteps in tqdm(perms):
     if debug == '1':
       print('cmd', cmd)
     out = sp.run(cmd, shell=True, capture_output=True, text=True)
-    urr = out.stdout.splitlines()
     if debug == '1':
       print('stderr')
       print(out.stderr)
     if debug == '1':
       print('stdout')
       print(out.stdout)
+    if out.returncode != 0:
+      print("There's an error in the gateway script", file=sys.stderr)
+      print(out.stderr, file=sys.stderr)
+      exit(out.returncode)
+    urr = out.stdout.splitlines()
     F = []
     pad = 0
     a, b = +math.inf, -math.inf
