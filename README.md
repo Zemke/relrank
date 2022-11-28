@@ -13,6 +13,26 @@ accumulated.
 
 **It is important to end with a new line, otherwise the last line is ignored**
 
+```console
+$ printf "1,2,3,0\n2,1,3,2\n3,1,2,1\n" | go run .
+1,3.79623560553611560876292427322945022268478343227734
+2,2.22542344452808269830422383031407485820025284071526
+3,1.40227170125122347764436998858737937735570257653784
+```
+
+It returns the user ID and its calculated rating as in `user,rating` per line.
+
+There are multiple environment variables to tweak the execution:
+
+`DEBUG=1` logs debug information to stderr. \
+Set `RELRANK_RELREL`, `RELRANK_RELSTEPS` to change `relRel`, `relSteps`
+settings. \
+`RELRANK_PREC` to change decimal precision. \
+`RELRANK_SCALE_MAX` to rescale the ratings by setting the maximum rating.
+
+The detailed configuration of each of these settings can be understood by
+reading on.
+
 ## Implementation
 
 An original implementation has been as part of
@@ -24,16 +44,7 @@ This application should allow for usage outside of Worms League or any
 particular league so that it can supplied only with the games that were played
 and then output the ranking.
 
-```console
-$ printf "1,2,3,0\n2,1,3,2\n3,1,2,1\n" | DEBUG=0 RELRANK_RELREL=1 RELRANK_PREC=50 go run .
-1,3.79623560553611560876292427322945022268478343227734
-2,2.22542344452808269830422383031407485820025284071526
-3,1.40227170125122347764436998858737937735570257653784
-```
-
-It returns the user ID and its calculated rating.
-
-If `DEBUG=1` it logs debug information to stderr.
+Go is also faster than PHP and a better suit for a standalone CLI application.
 
 ## Problem
 
