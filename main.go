@@ -83,6 +83,9 @@ func prepare(inp []string) prep {
 	var G []game
 	for k, l := range inp {
 		sp := strings.Split(l, ",")
+		if len(l) == 0 {
+			continue
+		}
 		if _, err := strconv.ParseInt(sp[2]+sp[3], 10, 64); err != nil && k == 0 {
 			dd("skipping csv header")
 			continue
