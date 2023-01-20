@@ -59,7 +59,7 @@ func setPrecision(prec int) {
 }
 
 func calcSteps(G []game) int {
-	var relSteps, err = strconv.ParseFloat(getenv("RELRANK_RELTEPS", "20"), 64)
+	var relSteps, err = strconv.ParseFloat(getenv("RELRANK_RELSTEPS", "20"), 64)
 	dd("relSteps:", relSteps)
 	if err != nil {
 		log.Fatalf("%f is invalid for RELRANK_RELSTEPS\n", relSteps)
