@@ -25,8 +25,8 @@ U = {i: n for i,n in [l.split(',') for l in open('csv/users.csv', 'r').read().sp
 permenv = os.getenv('PERM', '0')
 if permenv == '1':
   perms = list(itertools.product(
-    [15.9+(ch/10) for ch in range(-10, 11, 1)],
-    [20+ch for ch in range(-10, 11, 3)],
+    [15.1+(ch/10) for ch in range(-10, 11, 1)],
+    [20+ch for ch in range(-5, 6, 1)],
   ))
 elif ',' in permenv:
   perms = [tuple([float(n) for n in permenv.split(',')])]
